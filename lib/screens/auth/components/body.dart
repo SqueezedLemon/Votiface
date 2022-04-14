@@ -27,7 +27,7 @@ class Body extends StatelessWidget {
           child: SingleChildScrollView(
             child: Container(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.7,
               decoration: const BoxDecoration(
                   color: backColor,
                   borderRadius: BorderRadius.only(
