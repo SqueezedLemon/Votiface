@@ -24,58 +24,37 @@ class Body extends StatelessWidget {
           ),
         ),
         Expanded(
-          child: Container(
-            width: double.infinity,
-            decoration: const BoxDecoration(
-                color: backColor,
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(40.0),
-                  topLeft: Radius.circular(40.0),
-                )),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 40,
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 22),
-                  child: Text(
-                    'Login',
-                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+          child: SingleChildScrollView(
+            child: Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height * 0.5,
+              decoration: const BoxDecoration(
+                  color: backColor,
+                  borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(40.0),
+                    topLeft: Radius.circular(40.0),
+                  )),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 40,
                   ),
-                ),
-                Card(
-                  margin: EdgeInsets.fromLTRB(22, 10, 40, 10),
-                  child: Container(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Voter ID',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                        prefixIcon: Icon(Icons.account_circle),
-                      ),
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.text,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 22),
+                    child: Text(
+                      'Login',
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
                   ),
-                ),
-                Card(
-                  margin: EdgeInsets.fromLTRB(22, 10, 40, 10),
-                  child: Container(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                          hintText: 'Password',
+                  Card(
+                    margin: EdgeInsets.fromLTRB(22, 10, 40, 10),
+                    child: Container(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          hintText: 'Voter ID',
                           enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.all(
@@ -87,49 +66,68 @@ class Body extends StatelessWidget {
                               Radius.circular(10),
                             ),
                           ),
-                          prefixIcon: Icon(Icons.lock)),
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.text,
+                          prefixIcon: Icon(Icons.account_circle),
+                        ),
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.text,
+                      ),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      'Forget Password?  ',
-                      style: TextStyle(
-                          fontSize: 20,
-                          color: kPrimaryColor,
-                          fontWeight: FontWeight.bold),
+                  Card(
+                    margin: EdgeInsets.fromLTRB(22, 10, 40, 10),
+                    child: Container(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                            hintText: 'Password',
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                            prefixIcon: Icon(Icons.lock)),
+                        textInputAction: TextInputAction.next,
+                        keyboardType: TextInputType.text,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Container(
-                    width: 200,
-                    alignment: Alignment.center,
-                    child: ElevatedButton(
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
                       onPressed: () {},
-                      style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all(kPrimaryColor)),
+                      child: const Text(
+                        'Forget Password?  ',
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      width: 200,
+                      alignment: Alignment.center,
                       child: Text(
                         'Login',
                         style: Theme.of(context).textTheme.headline5,
                       ),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(80),
+                          color: kPrimaryColor),
                     ),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(80),
-                        color: kPrimaryColor),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
