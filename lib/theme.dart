@@ -15,12 +15,15 @@ ThemeData theme() {
 
 TextTheme textTheme() {
   return const TextTheme(
-    bodyText1: TextStyle(
-      color: kTextPColor,
-    ),
-    bodyText2: TextStyle(color: kTextColor, fontSize: 40),
-    headline1: TextStyle(color: kTextPColor, fontSize: 50),
-  );
+      bodyText1: TextStyle(
+        color: kTextPColor,
+      ),
+      bodyText2: TextStyle(
+        color: kTextColor,
+        fontSize: 40,
+      ),
+      headline1: TextStyle(color: kTextPColor, fontSize: 50),
+      headline5: TextStyle(color: kTextPColor));
 }
 
 AppBarTheme appBarTheme() {

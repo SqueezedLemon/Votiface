@@ -47,7 +47,7 @@ class Body extends StatelessWidget {
                   ),
                 ),
                 Card(
-                  margin: EdgeInsets.fromLTRB(22, 30, 40, 10),
+                  margin: EdgeInsets.fromLTRB(22, 10, 40, 10),
                   child: Container(
                     child: TextFormField(
                       decoration: InputDecoration(
@@ -71,24 +71,23 @@ class Body extends StatelessWidget {
                   ),
                 ),
                 Card(
-                  margin: EdgeInsets.fromLTRB(22, 30, 40, 10),
+                  margin: EdgeInsets.fromLTRB(22, 10, 40, 10),
                   child: Container(
                     child: TextFormField(
                       decoration: InputDecoration(
-                        hintText: 'Password',
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
+                          hintText: 'Password',
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
                           ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(10),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
                           ),
-                        ),
-                        prefixIcon: Icon(Icons.account_circle),
-                      ),
+                          prefixIcon: Icon(Icons.lock)),
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.text,
                     ),
@@ -98,18 +97,38 @@ class Body extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {},
-                    child: Text(
-                      'Forget Password',
-                      style: Theme.of(context).textTheme.bodyText2,
+                    child: const Text(
+                      'Forget Password?  ',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: kPrimaryColor,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ),
-                ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Login',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ))
+                SizedBox(
+                  height: 10,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width: 200,
+                    alignment: Alignment.center,
+                    child: ElevatedButton(
+                      onPressed: () {},
+                      style: ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all(kPrimaryColor)),
+                      child: Text(
+                        'Login',
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                    ),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(80),
+                        color: kPrimaryColor),
+                  ),
+                ),
               ],
             ),
           ),
