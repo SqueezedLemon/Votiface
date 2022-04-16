@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Toy Choir',
+        title: 'Votiface',
         debugShowCheckedModeBanner: false,
         theme: theme(),
         initialRoute: MainScreen.routeName,
