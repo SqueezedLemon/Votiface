@@ -123,7 +123,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       email: idController.text, password: passController.text),
                   style: ElevatedButton.styleFrom(
                     primary: kPrimaryColor,
-                    fixedSize: Size(200, 50),
+                    fixedSize: const Size(200, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(90.0),
                     ),
