@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:web3dart/web3dart.dart';
@@ -74,32 +75,48 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final logoutButton = Material(
+      elevation: 5,
+      borderRadius: BorderRadius.circular(20),
+      color: Colors.deepPurpleAccent,
+      child: MaterialButton(
+        padding: const EdgeInsets.fromLTRB(100, 15, 100, 15),
+        onPressed: () => FirebaseAuth.instance.signOut(),
+        child: const Text(
+          "Logout",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
     return Column(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   crossAxisAlignment: CrossAxisAlignment.center,
-        //   children: [
-        //     Align(
-        //       alignment: Alignment.center,
-        //       child: ElevatedButton(
-        //           onPressed: () {
-        //             votersCount();
-        //           },
-        //           child: Text("total Voters")),
-        //     ),
-        //     Text(
-        //       voters_count.toString(),
-        //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        //     ),
-        //     ElevatedButton(
-        //         onPressed: () {
-        //           getCandidates();
-        //         },
-        //         child: Text("total_candidates")),
-        //     Text(
-        //       candidates.toString(),
-        //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        //     ),
-        //   ],
-        );
+      children: [logoutButton],
+      //   mainAxisAlignment: MainAxisAlignment.center,
+      //   crossAxisAlignment: CrossAxisAlignment.center,
+      //   children: [
+      //     Align(
+      //       alignment: Alignment.center,
+      //       child: ElevatedButton(
+      //           onPressed: () {
+      //             votersCount();
+      //           },
+      //           child: Text("total Voters")),
+      //     ),
+      //     Text(
+      //       voters_count.toString(),
+      //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      //     ),
+      //     ElevatedButton(
+      //         onPressed: () {
+      //           getCandidates();
+      //         },
+      //         child: Text("total_candidates")),
+      //     Text(
+      //       candidates.toString(),
+      //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      //     ),
+      //   ],
+    );
   }
 }
