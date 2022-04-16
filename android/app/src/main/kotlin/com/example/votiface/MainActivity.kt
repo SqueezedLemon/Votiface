@@ -1,4 +1,4 @@
-package com.example.votiface
+package com.ubbb.votiface
 
 import io.flutter.embedding.android.FlutterActivity
 

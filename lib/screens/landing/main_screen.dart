@@ -18,7 +18,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   List<Widget> screens = [
-    AuthScreen(),
+    VoteScreen(),
     VoteScreen(),
     AccountScreen(),
   ];
