@@ -54,7 +54,7 @@ class _AccountScreenState extends State<AccountScreen> {
   }
 
   Future<DeployedContract> getContract() async {
-    String abi = await rootBundle.loadString("assets/abi.json");
+    String abi = await rootBundle.loadString("assets/blockchain/abi.json");
 
     DeployedContract contract = DeployedContract(
       ContractAbi.fromJson(abi, contractName),
