@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.votiface">
+    package="com.ubbb.votiface">
    <application
         android:label="votiface"
         android:name="${applicationName}"
