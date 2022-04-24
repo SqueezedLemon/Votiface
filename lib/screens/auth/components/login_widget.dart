@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:votiface/services/authentication/firebase_auth.dart';
-
+import '../components/register_widget.dart';
 import '../../../constants.dart';
 
 class LoginWidget extends StatefulWidget {
@@ -29,9 +29,9 @@ class _LoginWidgetState extends State<LoginWidget> {
       child: SingleChildScrollView(
         child: Container(
           width: double.infinity,
-          height: MediaQuery.of(context).size.height * 0.6,
+          height: MediaQuery.of(context).size.height * 0.7,
           decoration: const BoxDecoration(
-              color: backColor,
+              color: kPrimaryColor,
               borderRadius: BorderRadius.only(
                 topRight: Radius.circular(40.0),
                 topLeft: Radius.circular(40.0),
@@ -134,6 +134,25 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ),
                 ),
               ),
+              const Text(
+                "Don't have an account? ",
+                style: TextStyle(fontSize: 14),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegistrationScreen()));
+                },
+                child: const Text(
+                  "SignUp",
+                  style: TextStyle(
+                      color: Colors.redAccent,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12),
+                ),
+              )
             ],
           ),
         ),
