@@ -4,6 +4,7 @@ import 'package:votiface/model/user_model.dart';
 import 'package:votiface/screens/auth/components/body.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../constants.dart';
 
@@ -16,7 +17,6 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
-
   // string for displaying the error Message
   String? errorMessage;
 
@@ -25,6 +25,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   // editing Controller
   final firstNameEditingController = TextEditingController();
   final secondNameEditingController = TextEditingController();
+  final citizenshipNumberController = TextEditingController();
   final emailEditingController = TextEditingController();
   final passwordEditingController = TextEditingController();
   final confirmPasswordEditingController = TextEditingController();
@@ -83,6 +84,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ),
         ));
 
+    final citizenshipNumberField = TextFormField(
+        autofocus: false,
+        controller: citizenshipNumberController,
+        keyboardType: TextInputType.name,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return ("Citizenship Number cannot be Empty");
+          }
+          return null;
+        },
+        onSaved: (value) {
+          citizenshipNumberController.text = value!;
+        },
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          prefixIcon: const Icon(Icons.account_circle),
+          contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+          hintText: "Citizenship Number",
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ));
     //email field
     final emailField = TextFormField(
         autofocus: false,
@@ -189,7 +212,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.red),
+          icon: const Icon(Icons.arrow_back, color: Colors.red),
           onPressed: () {
             // passing this to our root
             Navigator.of(context).pop();
@@ -201,7 +224,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           child: Container(
             color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.all(36.0),
+              padding: const EdgeInsets.fromLTRB(25, 0, 25, 20),
               child: Form(
                 key: _formKey,
                 child: Column(
@@ -214,10 +237,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           "assets/logo.png",
                           fit: BoxFit.contain,
                         )),
-                    SizedBox(height: 45),
+                    SizedBox(height: 20),
                     firstNameField,
                     SizedBox(height: 20),
                     secondNameField,
+                    SizedBox(height: 20),
+                    citizenshipNumberField,
                     SizedBox(height: 20),
                     emailField,
                     SizedBox(height: 20),
@@ -226,7 +251,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     confirmPasswordField,
                     SizedBox(height: 20),
                     signUpButton,
-                    SizedBox(height: 15),
+                    SizedBox(height: 50),
                   ],
                 ),
               ),
@@ -270,6 +295,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             errorMessage = "An undefined Error happened.";
         }
         Fluttertoast.showToast(msg: errorMessage!);
+        // ignore: avoid_print
         print(error.code);
       }
     }
@@ -290,6 +316,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     userModel.uid = user.uid;
     userModel.firstName = firstNameEditingController.text;
     userModel.secondName = secondNameEditingController.text;
+    userModel.citizenshipNumber = citizenshipNumberController.text;
 
     await firebaseFirestore
         .collection("users")

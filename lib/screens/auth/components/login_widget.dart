@@ -4,7 +4,7 @@ import '../components/register_widget.dart';
 import '../../../constants.dart';
 
 class LoginWidget extends StatefulWidget {
-  LoginWidget({
+  const LoginWidget({
     Key? key,
   }) : super(key: key);
 
@@ -109,7 +109,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                     'Forget Password?  ',
                     style: TextStyle(
                         fontSize: 20,
-                        color: kPrimaryColor,
+                        color: kTextPColor,
                         fontWeight: FontWeight.bold),
                   ),
                 ),
@@ -122,7 +122,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   onPressed: () => signIn(
                       email: idController.text, password: passController.text),
                   style: ElevatedButton.styleFrom(
-                    primary: kPrimaryColor,
+                    primary: kBtnColor,
                     fixedSize: const Size(200, 50),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(90.0),
@@ -136,7 +136,7 @@ class _LoginWidgetState extends State<LoginWidget> {
               ),
               const Text(
                 "Don't have an account? ",
-                style: TextStyle(fontSize: 14),
+                style: TextStyle(fontSize: 20, color: kTextPColor),
               ),
               GestureDetector(
                 onTap: () {
@@ -148,9 +148,9 @@ class _LoginWidgetState extends State<LoginWidget> {
                 child: const Text(
                   "SignUp",
                   style: TextStyle(
-                      color: Colors.redAccent,
+                      color: kColor1,
                       fontWeight: FontWeight.bold,
-                      fontSize: 12),
+                      fontSize: 20),
                 ),
               )
             ],
