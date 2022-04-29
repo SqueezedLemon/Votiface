@@ -30,7 +30,7 @@ class Body extends StatelessWidget {
             ],
           ),
         ),
-        LoginWidget(),
+        const LoginWidget(),
       ],
     );
   }
