@@ -43,6 +43,7 @@ dependencies:
   firebase_storage: ^10.2.13
   image_picker: ^0.8.5
   modal_progress_hud_nsn: ^0.1.0-nullsafety-1
+  getwidget: ^2.0.5
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,7 @@ flutter:
   assets:
     - assets/blockchain/
     - assets/logo.png
+    - assets/ElectionBanner.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
