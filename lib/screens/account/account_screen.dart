@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:ui';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -20,9 +21,11 @@ File? image;
 final User? user = auth.currentUser;
 final uid = user?.uid;
 
+// final idTokenResult = user?.getIdToken().then(String token);
+final idTokenResult = user?.getIdTokenResult().then((value) => value.token);
+
 class AccountScreen extends StatefulWidget {
   static const routeName = '/account';
-
   const AccountScreen({Key? key}) : super(key: key);
 
   @override
@@ -44,6 +47,18 @@ class _AccountScreenState extends State<AccountScreen> {
       loggedInUser = UserModel.fromMap(value.data());
       setState(() {});
     });
+
+    print(
+      "Hello my name is bibek",
+    );
+  }
+
+  Future<String> getIdToken() async {
+    String? token = await user?.getIdTokenResult().then((value) => value.token);
+    if (token != null) {
+      return token;
+    }
+    return "";
   }
 
   final _picker = ImagePicker();
@@ -66,26 +81,33 @@ class _AccountScreenState extends State<AccountScreen> {
       showSpinner = true;
     });
 
-    var stream = new http.ByteStream(image!.openRead());
-    stream.cast();
+    var _userToken = await getIdToken();
 
-    var length = await image!.length();
+    // network part
+    // var uri = Uri.parse(
+    //     "https://vote-face-recog.herokuapp.com/account-api/user/set_profile_image/");
 
     var uri = Uri.parse(
-        'https://vote-face-recog.herokuapp.com/account-api/user/set_profile_image/');
-
+        "http://192.168.1.85:8000/account-api/user/set_profile_image/");
     var request = new http.MultipartRequest('POST', uri);
+    request.fields['idToken'] = _userToken;
 
-    request.fields['idToken'] = "$uid";
+    request.files.add(
+      http.MultipartFile.fromBytes("profileImage", image!.readAsBytesSync(),
+          filename: "$uid.jpg"),
+    );
 
-    var multiport = new http.MultipartFile('image', stream, length);
-
-    request.files.add(multiport);
+    print(request.files);
 
     var response = await request.send();
+    print("After request this....");
 
-    print(response.stream.toString());
-    if (response.statusCode == 200) {
+    var responded = await http.Response.fromStream(response);
+    final responseData = responded.body.toString();
+
+    print("The data was ${responseData}");
+    print("response code ${response.statusCode}");
+    if (response.statusCode == 202) {
       setState(() {
         showSpinner = false;
       });
@@ -241,8 +263,32 @@ class _AccountScreenState extends State<AccountScreen> {
       )
     ]);
 
+    final imageshow = Column(children: [
+      GestureDetector(
+        onTap: () {
+          getImage();
+        },
+        child: Container(
+          child: Center(
+            child: Image.network(
+                "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif"),
+          ),
+        ),
+      ),
+      SizedBox(
+        height: 15,
+      ),
+    ]);
+
     return Column(
-      children: [imagepick, name, email, citizenshipNumber, logoutButton],
+      children: [
+        imagepick,
+        name,
+        email,
+        citizenshipNumber,
+        logoutButton,
+        imageshow
+      ],
       //   mainAxisAlignment: MainAxisAlignment.center,
       //   crossAxisAlignment: CrossAxisAlignment.center,
       //   children: [
