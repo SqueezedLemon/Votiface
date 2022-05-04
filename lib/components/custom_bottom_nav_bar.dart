@@ -33,9 +33,11 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
         children: [
           Container(
             child: IconButton(
-              icon: Icon(selectedMenu == MenuState.home
-                  ? Icons.home_filled
-                  : Icons.home_outlined),
+              icon: Icon(
+                selectedMenu == MenuState.home
+                    ? Icons.home_filled
+                    : Icons.home_outlined,
+              ),
               iconSize: 40,
               onPressed: () {
                 Provider.of<NavItems>(context, listen: false).changeNavIndex(0);
@@ -47,9 +49,11 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           ),
           Container(
             child: IconButton(
-              icon: Icon(selectedMenu == MenuState.vote
-                  ? Icons.how_to_vote
-                  : Icons.how_to_vote_outlined),
+              icon: Icon(
+                selectedMenu == MenuState.vote
+                    ? Icons.how_to_vote
+                    : Icons.how_to_vote_outlined,
+              ),
               iconSize: 40,
               onPressed: () {
                 Provider.of<NavItems>(context, listen: false).changeNavIndex(1);
@@ -61,9 +65,11 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
           ),
           Container(
             child: IconButton(
-              icon: Icon(selectedMenu == MenuState.account
-                  ? Icons.person
-                  : Icons.person_outline),
+              icon: Icon(
+                selectedMenu == MenuState.account
+                    ? Icons.person
+                    : Icons.person_outline,
+              ),
               iconSize: 40,
               onPressed: () {
                 Provider.of<NavItems>(context, listen: false).changeNavIndex(2);
