@@ -7,6 +7,7 @@ import 'package:votiface/screens/auth/auth_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:votiface/screens/landing/components/body.dart';
 import 'package:votiface/screens/vote/vote_screen.dart';
+import 'package:votiface/screens/wallet_info/wallet_info.dart';
 
 class MainScreen extends StatefulWidget {
   static const routeName = '/main';
@@ -19,7 +20,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   List<Widget> screens = [
     VoteScreen(),
-    VoteScreen(),
+    WalletInfoScreen(),
     AccountScreen(),
   ];
 

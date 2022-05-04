@@ -37,13 +37,15 @@ dependencies:
   provider: ^6.0.2
   firebase_auth: ^3.3.8
   firebase_core: ^1.14.1
-  web3dart: ^2.3.5
   fluttertoast: ^8.0.9
   cloud_firestore: ^3.1.13
   firebase_storage: ^10.2.13
   image_picker: ^0.8.5
   modal_progress_hud_nsn: ^0.1.0-nullsafety-1
   getwidget: ^2.0.5
+  web3dart: ^2.3.5
+  qr_flutter: ^4.0.0
+
 
 dev_dependencies:
   flutter_test:
