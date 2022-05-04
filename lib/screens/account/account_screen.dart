@@ -35,6 +35,11 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   User? user = FirebaseAuth.instance.currentUser;
   UserModel loggedInUser = UserModel();
+  FirebaseStorage storage = FirebaseStorage.instance;
+
+  var profileImageUrl = "";
+  var isProfileImageEmpty = true;
+  var isProfileImageLoading = true;
 
   @override
   void initState() {
@@ -51,6 +56,35 @@ class _AccountScreenState extends State<AccountScreen> {
     print(
       "Hello my name is bibek",
     );
+
+    getAvatarUrlForProfile();
+  }
+
+  getAvatarUrlForProfile() async {
+    var _url = "";
+    var isEmpty = false;
+
+    try {
+      var url_img = await storage
+          .ref()
+          .child("profile-images/$uid.jpeg")
+          // .child("profile-images/ADb0YImFpkV73jfDwAnuiDbllOk2.jpeg")
+          .getDownloadURL();
+
+      _url = url_img;
+      print("url was $url_img");
+    } catch (e) {
+      isEmpty = true;
+    }
+
+    setState(() {
+      profileImageUrl = _url;
+      isProfileImageEmpty = isEmpty;
+      isProfileImageLoading = false;
+
+      print(
+          "state was $profileImageUrl $isProfileImageEmpty $isProfileImageLoading");
+    });
   }
 
   Future<String> getIdToken() async {
@@ -269,25 +303,27 @@ class _AccountScreenState extends State<AccountScreen> {
           getImage();
         },
         child: Container(
-          child: Center(
-            child: Image.network(
-                "https://docs.flutter.dev/assets/images/dash/dash-fainting.gif"),
-          ),
-        ),
+            child: Center(
+          child: Image.network(profileImageUrl),
+        )),
       ),
       SizedBox(
         height: 15,
       ),
     ]);
 
+    if (isProfileImageLoading) {
+      return Container(child: CircularProgressIndicator());
+    }
+
     return Column(
       children: [
-        imagepick,
+        isProfileImageEmpty ? imagepick : imageshow,
         name,
         email,
         citizenshipNumber,
         logoutButton,
-        imageshow
+        // imageshow
       ],
       //   mainAxisAlignment: MainAxisAlignment.center,
       //   crossAxisAlignment: CrossAxisAlignment.center,
