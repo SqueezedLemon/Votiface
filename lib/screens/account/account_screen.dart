@@ -68,7 +68,7 @@ class _AccountScreenState extends State<AccountScreen> {
       var url_img = await storage
           .ref()
           .child("profile-images/$uid.jpeg")
-          // .child("profile-images/ADb0YImFpkV73jfDwAnuiDbllOk2.jpeg")
+          // .child("profile-images/bibekUrkkkasdpkV73jfDwAnuiDbllOk2.jpeg")
           .getDownloadURL();
 
       _url = url_img;
