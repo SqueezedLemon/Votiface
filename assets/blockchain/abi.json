@@ -2,9 +2,9 @@
   {
     "inputs": [
       {
-        "internalType": "string[][2]",
+        "internalType": "string[3][]",
         "name": "candidateNamesParty",
-        "type": "string[][2]"
+        "type": "string[3][]"
       },
       {
         "internalType": "string[]",
@@ -12,8 +12,21 @@
         "type": "string[]"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "constructor"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string[3][]",
+        "name": "candidateNamesParty",
+        "type": "string[3][]"
+      }
+    ],
+    "name": "addCandidates",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
   },
   {
     "inputs": [
@@ -31,14 +44,19 @@
         "type": "string"
       },
       {
-        "internalType": "uint256",
-        "name": "voteCount",
-        "type": "uint256"
-      },
-      {
         "internalType": "string",
         "name": "party",
         "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "area",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "voteCount",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -59,6 +77,13 @@
   },
   {
     "inputs": [],
+    "name": "fund",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
     "name": "getCandidates",
     "outputs": [
       {
@@ -69,14 +94,19 @@
             "type": "string"
           },
           {
-            "internalType": "uint256",
-            "name": "voteCount",
-            "type": "uint256"
-          },
-          {
             "internalType": "string",
             "name": "party",
             "type": "string"
+          },
+          {
+            "internalType": "uint256",
+            "name": "area",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "voteCount",
+            "type": "uint256"
           }
         ],
         "internalType": "struct Voting.Candidate[]",
@@ -113,11 +143,34 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "get_balance",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
-        "internalType": "address",
+        "internalType": "address payable",
         "name": "voter",
         "type": "address"
+      },
+      {
+        "internalType": "string",
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "area",
+        "type": "string"
       }
     ],
     "name": "giveRightToVote",
@@ -152,17 +205,57 @@
   {
     "inputs": [
       {
+        "internalType": "address",
+        "name": "voter",
+        "type": "address"
+      }
+    ],
+    "name": "removeRightToVote",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "numString",
+        "type": "string"
+      }
+    ],
+    "name": "stringToUint",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
         "internalType": "uint256",
         "name": "candidate",
         "type": "uint256"
-      },
+      }
+    ],
+    "name": "voteCandidate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
       {
         "internalType": "uint256",
         "name": "party",
         "type": "uint256"
       }
     ],
-    "name": "vote",
+    "name": "voteParty",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -178,8 +271,28 @@
     "name": "voters",
     "outputs": [
       {
+        "internalType": "string",
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "area",
+        "type": "uint256"
+      },
+      {
         "internalType": "bool",
         "name": "canVote",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "votedForCandidate",
+        "type": "bool"
+      },
+      {
+        "internalType": "bool",
+        "name": "votedForParty",
         "type": "bool"
       }
     ],

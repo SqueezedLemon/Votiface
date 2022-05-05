@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/widgets.dart';
+import 'package:votiface/screens/candidate_screen.dart/candidate_page.dart';
 
 import '../vote/components/body.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -150,7 +151,10 @@ class _VoteScreenState extends State<VoteScreen> {
                             'Vote',
                             style: const TextStyle(fontSize: 26),
                           ),
-                          onPressed: () {/* ... */},
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(CandidatePage.routeName);
+                          },
                         )
                       ],
                     )
