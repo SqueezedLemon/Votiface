@@ -18,9 +18,9 @@ class BlockChain extends ChangeNotifier {
       'e90415fb148e28b92a5024c27e6ca008cd05c8e0f01c723f02c44ae590380f32';
   // String privateKey =
   //     '614aff264350728eed060541370810b678d49482bd6f957ce200d93ba18d51b2';
-  String rpcUrl = 'http://192.168.17.113:8545';
-  // String rpcUrl = 'https://kovan.infura.io/v3/5eddb680b6cf4ea0936f900b9269b4e9';
-  String contractAddress = "0xc7605E50aecaB380E59AfC6ddbF0bCFb63a7A157";
+  // String rpcUrl = 'http://192.168.17.113:8545';
+  String rpcUrl = 'https://kovan.infura.io/v3/5eddb680b6cf4ea0936f900b9269b4e9';
+  String contractAddress = "0x910C23D26b8Ab871a6c8c3570aBB0D2d381e3726";
   late Client httpClient;
   late Web3Client ethereumClient;
   late EthPrivateKey credentials;
