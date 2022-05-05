@@ -21,12 +21,12 @@ class WalletInfoScreen extends StatefulWidget {
 
 class _WalletInfoScreenState extends State<WalletInfoScreen> {
   String privateKey =
-      'ccf8427c2704fec9f83aa916741f089efccb9fe6e5d89f506343c823eedbcbce';
+      'e90415fb148e28b92a5024c27e6ca008cd05c8e0f01c723f02c44ae590380f32';
   // String privateKey =
   //     '614aff264350728eed060541370810b678d49482bd6f957ce200d93ba18d51b2';
-  String rpcUrl = 'http://192.168.0.109:8545';
+  String rpcUrl = 'http://192.168.17.113:8545';
   // String rpcUrl = 'https://kovan.infura.io/v3/5eddb680b6cf4ea0936f900b9269b4e9';
-  String contractAddress = "0x7B9031a6824a1C2f7757Eb6F4B7507eF60B64495";
+  String contractAddress = "0xc7605E50aecaB380E59AfC6ddbF0bCFb63a7A157";
   late Client httpClient;
   late Web3Client ethereumClient;
   late EthPrivateKey credentials;
