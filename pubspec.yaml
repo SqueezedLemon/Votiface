@@ -47,6 +47,10 @@ dependencies:
   qr_flutter: ^4.0.0
   shared_preferences: 2.0.13 
 
+  camera:
+  path_provider:
+  path:  
+
 
 dev_dependencies:
   flutter_test:

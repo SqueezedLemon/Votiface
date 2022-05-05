@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:votiface/screens/candidate_screen.dart/components/candidate_card.dart';
 
+import 'package:image_picker/image_picker.dart';
 import '../../constants.dart';
 import '../../services/blockchain/blockchain.dart';
 
@@ -16,6 +19,11 @@ class CandidatePage extends StatefulWidget {
 class _CandidatePageState extends State<CandidatePage> {
   late List selectionList;
   late BlockChain bc;
+
+  final _picker = ImagePicker();
+
+  File? image;
+
   @override
   void initState() {
     bc = Provider.of<BlockChain>(context, listen: false);
@@ -32,6 +40,24 @@ class _CandidatePageState extends State<CandidatePage> {
       ];
     });
     print('after $selectionList');
+  }
+
+  handleCastVote() async {
+    // take selfie
+    await getImage();
+  }
+
+  Future getImage() async {
+    final pickedFile =
+        await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
+
+    if (pickedFile != null) {
+      image = File(pickedFile.path);
+      print("all good bibek");
+      setState(() {});
+    } else {
+      print('no image selected');
+    }
   }
 
   @override
@@ -138,14 +164,15 @@ class _CandidatePageState extends State<CandidatePage> {
                             ),
                           ),
                           child: ElevatedButton(
-                            onPressed: () {
+                            onPressed: () async {
                               //todo confirmation with popup
-
+                              print("voting....");
+                              await handleCastVote();
                               //todo face detection
-
-                              bc.submit('voteCandidate', [
-                                selectionList.indexWhere((element) => false)
-                              ]);
+                              //selectedCandidate = selectionList.indexWhere((element) => false)
+                              // bc.submit('voteCandidate', [
+                              //   selectionList.indexWhere((element) => false)
+                              // ]);
                             },
                             style: ElevatedButton.styleFrom(
                               primary: kPrimaryColor,
