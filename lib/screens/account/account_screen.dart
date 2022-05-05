@@ -16,6 +16,8 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:http/http.dart';
 
+const IconData upload = IconData(0xe695, fontFamily: 'MaterialIcons');
+
 final FirebaseAuth auth = FirebaseAuth.instance;
 File? image;
 final User? user = auth.currentUser;
@@ -122,8 +124,8 @@ class _AccountScreenState extends State<AccountScreen> {
     //     "https://vote-face-recog.herokuapp.com/account-api/user/set_profile_image/");
 
     var uri = Uri.parse(
-        "http://192.168.1.85:8000/account-api/user/set_profile_image/");
-    var request = new http.MultipartRequest('POST', uri);
+        "http://192.168.254.13:8000/account-api/user/set_profile_image/");
+    var request = http.MultipartRequest('POST', uri);
     request.fields['idToken'] = _userToken;
 
     request.files.add(
@@ -216,142 +218,214 @@ class _AccountScreenState extends State<AccountScreen> {
     final logoutButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(20),
-      color: Colors.deepPurpleAccent,
-      child: MaterialButton(
-        padding: const EdgeInsets.fromLTRB(100, 15, 100, 15),
-        onPressed: () => FirebaseAuth.instance.signOut(),
-        child: const Text(
-          "Logout",
-          textAlign: TextAlign.center,
+      color: kColor3,
+      child: Container(
+        child: MaterialButton(
+          padding: const EdgeInsets.fromLTRB(100, 15, 100, 15),
+          onPressed: () => FirebaseAuth.instance.signOut(),
+          child: const Text(
+            "Logout",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+    );
+    final name = Text(
+      "${loggedInUser.firstName} ${loggedInUser.secondName}",
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+          fontSize: 20, color: kTextColor, fontWeight: FontWeight.bold),
+    );
+    final email = Text("Email : ${loggedInUser.email}",
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+            fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold));
+    final citizenshipNumber = Text(
+      "C No. : ${loggedInUser.citizenshipNumber}",
+      textAlign: TextAlign.center,
+      style: const TextStyle(
+          fontSize: 20, color: kTextColor, fontWeight: FontWeight.bold),
+    );
+
+    // ignore: prefer_const_constructors
+
+    final space = SizedBox(
+      height: MediaQuery.of(context).size.height * 0.04,
+    );
+    final ySpace = SizedBox(
+      width: MediaQuery.of(context).size.width * 0.05,
+    );
+
+    final profile = Row(
+      children: [
+        ySpace,
+        const Text(
+          "Profile",
           style: TextStyle(
-              fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
-    final name = Container(
-      padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-      color: backColor,
-      child: Text(
-        "Name : ${loggedInUser.firstName} ${loggedInUser.secondName}",
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
-      ),
-    );
-    final email = Container(
-      padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-      color: backColor,
-      child: Text(
-        "Email : ${loggedInUser.email}",
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
-      ),
-    );
-    final citizenshipNumber = Container(
-      padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-      color: backColor,
-      child: Text(
-        "Citizenship No. : ${loggedInUser.citizenshipNumber}",
-        textAlign: TextAlign.center,
-        style: const TextStyle(
-            fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
-      ),
+              fontSize: 35, color: Colors.black, fontWeight: FontWeight.w900),
+        )
+      ],
     );
 
-    final imagepick = Column(children: [
-      GestureDetector(
-        onTap: () {
-          getImage();
-        },
-        child: Container(
-          child: image == null
-              ? const Center(
-                  child: Text('Pick Image'),
-                )
-              : Container(
-                  child: Center(
-                    child: Image.file(
-                      File(image!.path).absolute,
-                      height: 100,
-                      width: 100,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+    // final imagepick = Column(children: [
+    //   GestureDetector(
+    //     onTap: () {
+    //       getImage();
+    //     },
+    //     child: Container(
+    //       child: image == null
+    //           ? const Center(
+    //               child: Text('Pick Image'),
+    //             )
+    //           : Center(
+    //               child: Image.file(
+    //                 File(image!.path).absolute,
+    //                 height: 100,
+    //                 width: 100,
+    //                 fit: BoxFit.cover,
+    //               ),
+    //             ),
+    //     ),
+    //   ),
+    //   const SizedBox(
+    //     height: 15,
+    //   ),
+    //   GestureDetector(
+    //     onTap: () {
+    //       uploadImage();
+    //     },
+    //     child: Container(
+    //       height: 50,
+    //       width: 200,
+    //       color: Colors.green,
+    //       child: const Center(child: Text('Upload')),
+    //     ),
+    //   )
+    // ]);
+
+    final imagepick = SizedBox(
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Row(
+          children: [
+            ySpace,
+            GestureDetector(
+              onTap: () {
+                getImage();
+              },
+              child: CircleAvatar(
+                radius: 50,
+                child: image == null
+                    ? const Center(
+                        child: Text('Pick Image'),
+                      )
+                    : CircleAvatar(
+                        radius: 50,
+                        child: Image.file(
+                          File(image!.path).absolute,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+              ),
+            ),
+            ySpace,
+            GestureDetector(
+              onTap: () {
+                uploadImage();
+              },
+              child: Container(
+                height: 30,
+                width: 30,
+                color: backColor,
+                child: const Center(
+                  child: Icon(Icons.upload),
                 ),
+              ),
+            ),
+            ySpace,
+            Column(
+              children: [name, citizenshipNumber],
+              mainAxisAlignment: MainAxisAlignment.center,
+            )
+          ],
         ),
       ),
-      const SizedBox(
-        height: 15,
-      ),
-      GestureDetector(
-        onTap: () {
-          uploadImage();
-        },
-        child: Container(
-          height: 50,
-          width: 200,
-          color: Colors.green,
-          child: const Center(child: Text('Upload')),
-        ),
-      )
-    ]);
+      width: MediaQuery.of(context).size.width * 0.90,
+      height: MediaQuery.of(context).size.height * 0.15,
+    );
 
-    final imageshow = Column(children: [
-      GestureDetector(
-        onTap: () {
-          getImage();
-        },
-        child: Container(
-          height: 400,
-          width: 400,
-          decoration: const BoxDecoration(shape: BoxShape.circle),
-          child: Image.network(profileImageUrl),
+    final imageshow = SizedBox(
+      child: Card(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Row(
+          children: [
+            ySpace,
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: NetworkImage(profileImageUrl),
+            ),
+            ySpace,
+            Column(
+              children: [name, citizenshipNumber],
+              mainAxisAlignment: MainAxisAlignment.center,
+            )
+          ],
         ),
       ),
-      const SizedBox(
-        height: 15,
-      ),
-    ]);
+      width: MediaQuery.of(context).size.width * 0.90,
+      height: MediaQuery.of(context).size.height * 0.15,
+    );
 
     if (isProfileImageLoading) {
-      return Container(child: const CircularProgressIndicator());
+      return const CircularProgressIndicator();
     }
 
-    return Column(
-      children: [
-        isProfileImageEmpty ? imagepick : imageshow,
-        name,
-        email,
-        citizenshipNumber,
-        logoutButton,
-        // imageshow
-      ],
-      //   mainAxisAlignment: MainAxisAlignment.center,
-      //   crossAxisAlignment: CrossAxisAlignment.center,
-      //   children: [
-      //     Align(
-      //       alignment: Alignment.center,
-      //       child: ElevatedButton(
-      //           onPressed: () {
-      //             votersCount();
-      //           },
-      //           child: Text("total Voters")),
-      //     ),
-      //     Text(
-      //       voters_count.toString(),
-      //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      //     ),
-      //     ElevatedButton(
-      //         onPressed: () {
-      //           getCandidates();
-      //         },
-      //         child: Text("total_candidates")),
-      //     Text(
-      //       candidates.toString(),
-      //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      //     ),
-      //   ],
+    return Container(
+      width: double.infinity,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          space,
+          profile,
+          space,
+          isProfileImageEmpty ? imagepick : imageshow,
+          space,
+          logoutButton,
+          // imageshow
+        ],
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   crossAxisAlignment: CrossAxisAlignment.center,
+        //   children: [
+        //     Align(
+        //       alignment: Alignment.center,
+        //       child: ElevatedButton(
+        //           onPressed: () {
+        //             votersCount();
+        //           },
+        //           child: Text("total Voters")),
+        //     ),
+        //     Text(
+        //       voters_count.toString(),
+        //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        //     ),
+        //     ElevatedButton(
+        //         onPressed: () {
+        //           getCandidates();
+        //         },
+        //         child: Text("total_candidates")),
+        //     Text(
+        //       candidates.toString(),
+        //       style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+        //     ),
+        //   ],
+      ),
     );
   }
 }
