@@ -230,9 +230,9 @@ class _AccountScreenState extends State<AccountScreen> {
     );
     final name = Container(
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-      color: Colors.yellow,
+      color: backColor,
       child: Text(
-        "${loggedInUser.firstName} ${loggedInUser.secondName}",
+        "Name : ${loggedInUser.firstName} ${loggedInUser.secondName}",
         textAlign: TextAlign.center,
         style: const TextStyle(
             fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
@@ -240,9 +240,9 @@ class _AccountScreenState extends State<AccountScreen> {
     );
     final email = Container(
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-      color: Colors.yellow,
+      color: backColor,
       child: Text(
-        "${loggedInUser.email}",
+        "Email : ${loggedInUser.email}",
         textAlign: TextAlign.center,
         style: const TextStyle(
             fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
@@ -250,9 +250,9 @@ class _AccountScreenState extends State<AccountScreen> {
     );
     final citizenshipNumber = Container(
       padding: const EdgeInsets.fromLTRB(10, 15, 10, 15),
-      color: Colors.yellow,
+      color: backColor,
       child: Text(
-        "${loggedInUser.citizenshipNumber}",
+        "Citizenship No. : ${loggedInUser.citizenshipNumber}",
         textAlign: TextAlign.center,
         style: const TextStyle(
             fontSize: 20, color: Colors.blue, fontWeight: FontWeight.bold),
@@ -281,7 +281,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 ),
         ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 15,
       ),
       GestureDetector(
@@ -303,17 +303,19 @@ class _AccountScreenState extends State<AccountScreen> {
           getImage();
         },
         child: Container(
-            child: Center(
+          height: 400,
+          width: 400,
+          decoration: const BoxDecoration(shape: BoxShape.circle),
           child: Image.network(profileImageUrl),
-        )),
+        ),
       ),
-      SizedBox(
+      const SizedBox(
         height: 15,
       ),
     ]);
 
     if (isProfileImageLoading) {
-      return Container(child: CircularProgressIndicator());
+      return Container(child: const CircularProgressIndicator());
     }
 
     return Column(

@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:web3dart/crypto.dart';
 import 'package:web3dart/web3dart.dart';
 
@@ -21,8 +20,6 @@ class WalletInfoScreen extends StatefulWidget {
 }
 
 class _WalletInfoScreenState extends State<WalletInfoScreen> {
-  bool isLoading = true;
-  String publicKey = "";
   String privateKey =
       'ccf8427c2704fec9f83aa916741f089efccb9fe6e5d89f506343c823eedbcbce';
   // String privateKey =
@@ -33,65 +30,34 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
   late Client httpClient;
   late Web3Client ethereumClient;
   late EthPrivateKey credentials;
-
+  String publicKey = "";
   String contractName = "Voting";
 
   int voters_count = 0;
   List<dynamic> candidates = [[]];
 
-  String getPublicKey(privateKey_) {
+  void init(privateKey_) {
     credentials = EthPrivateKey.fromHex(privateKey_);
     privateKey = privateKey_;
     httpClient = Client();
     ethereumClient = Web3Client(rpcUrl, httpClient);
     publicKey = credentials.address.toString();
-    return publicKey;
-  }
-
-  void doStorage() async {
-    print("doing storage");
-    final prefs = await SharedPreferences.getInstance();
-
-    var sk = prefs.getString("sk") ?? "0x0";
-    var pk = prefs.getString("pk") ?? "0x0";
-
-    // keys already exists
-    if (sk != "0x0" && pk != "0x0") {
-      setState(() {
-        privateKey = sk;
-        publicKey = pk;
-        isLoading = false;
-      });
-
-      print("All good");
-    }
-
-    sk = await generateRandomAddress();
-    pk = getPublicKey(sk);
-
-    await prefs.setString("sk", sk);
-    await prefs.setString("pk", pk);
-
-    setState(() {
-      privateKey = sk;
-      publicKey = pk;
-      isLoading = false;
-    });
+    print(publicKey);
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
-    // init(privateKey);
-    doStorage();
+    init(privateKey);
   }
 
-  Future<String> generateRandomAddress() async {
+  Future<void> generateRandomAddress() async {
     var rng = Random.secure();
     EthPrivateKey random = EthPrivateKey.createRandom(rng);
     var address = await random.extractAddress();
     String private = bytesToHex(random.privateKey);
-    return private;
+    init(private);
   }
 
   Future<void> votersCount() async {
@@ -222,15 +188,15 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
                 ),
               )
             : Text("press candidates "),
-        // ElevatedButton(
-        //     onPressed: () {
-        //       generateRandomAddress();
-        //     },
-        //     child: Text("randomize address")),
-        // // Text(
-        //   privateKey,
-        //   style: TextStyle(fontSize: 10),
-        // ),
+        ElevatedButton(
+            onPressed: () {
+              generateRandomAddress();
+            },
+            child: Text("randomize address")),
+        Text(
+          privateKey,
+          style: TextStyle(fontSize: 10),
+        ),
         Container(
           padding: EdgeInsets.all(3),
           child: QrImage(
@@ -241,7 +207,7 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
         ),
         Text(
           publicKey,
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(fontSize: 10),
         ),
       ],
     );

@@ -1,4 +1,6 @@
 import 'dart:ui';
+import 'package:flutter/widgets.dart';
+
 import '../vote/components/body.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +35,7 @@ class _VoteScreenState extends State<VoteScreen> {
             'Elections',
             style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
           ),
-          SizedBox(width: double.infinity, height: kDefaultPadding),
+          const SizedBox(width: double.infinity, height: kDefaultPadding),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -107,35 +109,53 @@ class _VoteScreenState extends State<VoteScreen> {
                 borderRadius: BorderRadius.circular(20.0),
               ),
               elevation: 10.0,
-              child: Column(
-                children: [
-                  ListTile(
-                    title: Text(heading),
-                    subtitle: Text(subheading),
+              child: Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/ElectionBanner.png"),
+                    fit: BoxFit.contain,
+                    alignment: Alignment.topCenter,
                   ),
-                  SizedBox(
-                      height: 250.0,
-                      child: Image.asset(
-                        "assets/ElectionBanner.png",
-                        fit: BoxFit.contain,
-                      )),
-                  Container(
-                    padding: const EdgeInsets.all(16.0),
-                    alignment: Alignment.centerLeft,
-                    child: Text(supportingText),
-                  ),
-                  ButtonBar(
-                    children: [
-                      TextButton(
-                        child: const Text(
-                          'Vote',
-                          style: const TextStyle(fontSize: 26),
-                        ),
-                        onPressed: () {/* ... */},
-                      )
-                    ],
-                  )
-                ],
+                ),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: Text(
+                        heading,
+                        style: const TextStyle(
+                            color: kTextPColor,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800),
+                      ),
+                      subtitle: Text(
+                        subheading,
+                        style: const TextStyle(
+                            color: kTextPColor,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w800),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 150.0,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      alignment: Alignment.centerLeft,
+                      child: Text(supportingText),
+                    ),
+                    ButtonBar(
+                      children: [
+                        TextButton(
+                          child: const Text(
+                            'Vote',
+                            style: const TextStyle(fontSize: 26),
+                          ),
+                          onPressed: () {/* ... */},
+                        )
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
             decoration: BoxDecoration(
