@@ -41,8 +41,7 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
     privateKey = privateKey_;
     httpClient = Client();
     ethereumClient = Web3Client(rpcUrl, httpClient);
-    publicKey = credentials.address.toString();
-    print(publicKey);
+    publicKey = credentials.address.toString().trim();
     setState(() {});
   }
 
