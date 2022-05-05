@@ -1,6 +1,8 @@
 import 'dart:ui';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:votiface/screens/candidate_screen.dart/candidate_page.dart';
+import 'package:votiface/services/blockchain/blockchain.dart';
 
 import '../vote/components/body.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,10 +25,15 @@ class VoteScreen extends StatefulWidget {
 }
 
 class _VoteScreenState extends State<VoteScreen> {
+  @override
+  void initState() {
+    Provider.of<BlockChain>(context, listen: false).init();
+    super.initState();
+  }
+
   var tab = currectTab.active;
   @override
   Widget build(BuildContext context) {
-    final screen_height = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.all(kDefaultPadding),
       child: Column(

@@ -5,6 +5,7 @@ import 'package:votiface/providers/nav_bar_provider.dart';
 import 'package:votiface/routes.dart';
 import 'package:votiface/screens/landing/landing_screen.dart';
 import 'package:votiface/screens/landing/main_screen.dart';
+import 'package:votiface/services/blockchain/blockchain.dart';
 import 'package:votiface/theme.dart';
 
 void main() async {
@@ -23,6 +24,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => NavItems(),
         ),
+        ChangeNotifierProvider(
+          create: (context) => BlockChain(),
+        )
       ],
       child: MaterialApp(
         title: 'Votiface',

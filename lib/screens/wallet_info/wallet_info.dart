@@ -81,7 +81,7 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
 
   Future<DeployedContract> getContract() async {
     String contractJson =
-        await rootBundle.loadString("assets/contract/Voting.json");
+        await rootBundle.loadString("assets/blockchain/Voting.json");
     var jsonAbi = jsonDecode(contractJson);
     var abi = jsonEncode(jsonAbi['abi']);
 

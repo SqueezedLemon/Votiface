@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:votiface/screens/candidate_screen.dart/components/candidate_card.dart';
 
 import '../../constants.dart';
+import '../../services/blockchain/blockchain.dart';
 
 class CandidatePage extends StatefulWidget {
   static const routeName = '/candidate';
@@ -12,8 +14,29 @@ class CandidatePage extends StatefulWidget {
 }
 
 class _CandidatePageState extends State<CandidatePage> {
+  late List selectionList;
+  late BlockChain bc;
+  @override
+  void initState() {
+    bc = Provider.of<BlockChain>(context, listen: false);
+    selectionList = [for (var i = 0; i < bc.candidates.length; i++) true];
+    super.initState();
+  }
+
+  void selectionCallback(int selectedIndex) {
+    print('before $selectionList $selectedIndex');
+    setState(() {
+      selectionList = [
+        for (var i = 0; i < selectionList.length; i++)
+          if (i == selectedIndex) false else true
+      ];
+    });
+    print('after $selectionList');
+  }
+
   @override
   Widget build(BuildContext context) {
+    print(bc.candidates.length);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -48,8 +71,8 @@ class _CandidatePageState extends State<CandidatePage> {
                   const SizedBox(
                     height: 8,
                   ),
-                  const Text(
-                    '299658',
+                  Text(
+                    bc.voters_count.toString(),
                     style: const TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
@@ -73,24 +96,34 @@ class _CandidatePageState extends State<CandidatePage> {
                   Column(
                     children: [
                       const SizedBox(height: 10),
-                      CandidateCard(
-                        candidate_image_url: 'assets/ElectionBanner.png',
-                        candidate_name: 'Biraj Motherfucker',
-                        candidate_party_url: 'assets/logo.png',
-                        candidate_party_name: 'Nepali Congress',
+                      ListView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: bc.candidates.length,
+                        itemBuilder: (context, index) {
+                          return CandidateCard(
+                            isSelectable: selectionList[index],
+                            selectedIndex: index,
+                            selectionCallback: selectionCallback,
+                            candidate_image_url: 'assets/ElectionBanner.png',
+                            candidate_name: bc.candidates[index][0],
+                            candidate_party_url: 'assets/logo.png',
+                            candidate_party_name: bc.candidates[index][1],
+                          );
+                        },
                       ),
-                      CandidateCard(
-                        candidate_image_url: 'assets/ElectionBanner.png',
-                        candidate_name: 'Biraj Motherfucker',
-                        candidate_party_url: 'assets/logo.png',
-                        candidate_party_name: 'Nepali Congress',
-                      ),
-                      CandidateCard(
-                        candidate_image_url: 'assets/ElectionBanner.png',
-                        candidate_name: 'Biraj Motherfucker',
-                        candidate_party_url: 'assets/logo.png',
-                        candidate_party_name: 'Nepali Congress',
-                      ),
+                      // CandidateCard(
+                      //   candidate_image_url: 'assets/ElectionBanner.png',
+                      //   candidate_name: 'Biraj Motherfucker',
+                      //   candidate_party_url: 'assets/logo.png',
+                      //   candidate_party_name: 'Nepali Congress',
+                      // ),
+                      // CandidateCard(
+                      //   candidate_image_url: 'assets/ElectionBanner.png',
+                      //   candidate_name: 'Biraj Motherfucker',
+                      //   candidate_party_url: 'assets/logo.png',
+                      //   candidate_party_name: 'Nepali Congress',
+                      // ),
                       const SizedBox(
                         height: 20,
                       ),
@@ -104,9 +137,27 @@ class _CandidatePageState extends State<CandidatePage> {
                               borderRadius: BorderRadius.circular(90.0),
                             ),
                           ),
-                          child: Text(
-                            'Submit Vote',
-                            style: Theme.of(context).textTheme.headline5,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              //todo confirmation with popup
+
+                              //todo face detection
+
+                              bc.submit('voteCandidate', [
+                                selectionList.indexWhere((element) => false)
+                              ]);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: kPrimaryColor,
+                              fixedSize: const Size(400, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(90.0),
+                              ),
+                            ),
+                            child: Text(
+                              'Submit Vote',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
                           ),
                         ),
                       ),

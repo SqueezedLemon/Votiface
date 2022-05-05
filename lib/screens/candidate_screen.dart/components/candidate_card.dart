@@ -5,12 +5,18 @@ class CandidateCard extends StatefulWidget {
   final String candidate_name;
   final String candidate_party_url;
   final String candidate_party_name;
+  final bool isSelectable;
+  final int selectedIndex;
+  final Function selectionCallback;
   const CandidateCard({
     Key? key,
     required this.candidate_image_url,
     required this.candidate_name,
     required this.candidate_party_url,
     required this.candidate_party_name,
+    required this.isSelectable,
+    required this.selectedIndex,
+    required this.selectionCallback,
   }) : super(key: key);
 
   @override
@@ -18,15 +24,15 @@ class CandidateCard extends StatefulWidget {
 }
 
 class _CandidateCardState extends State<CandidateCard> {
-  bool isSelected = false;
-
   @override
   Widget build(BuildContext context) {
+    bool isSelected = !widget.isSelectable;
+
     return GestureDetector(
       onTap: () {
-        setState(() {
-          isSelected = !isSelected;
-        });
+        if (widget.isSelectable) {
+          widget.selectionCallback(widget.selectedIndex);
+        }
       },
       child: Card(
         margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
