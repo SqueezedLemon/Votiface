@@ -120,11 +120,11 @@ class _AccountScreenState extends State<AccountScreen> {
     var _userToken = await getIdToken();
 
     // network part
-    // var uri = Uri.parse(
-    //     "https://vote-face-recog.herokuapp.com/account-api/user/set_profile_image/");
-
     var uri = Uri.parse(
-        "http://192.168.254.13:8000/account-api/user/set_profile_image/");
+        "https://vote-face-recog.herokuapp.com/account-api/user/set_profile_image/");
+
+    // var uri = Uri.parse(
+    //     "http://192.168.254.13:8000/account-api/user/set_profile_image/");
     var request = http.MultipartRequest('POST', uri);
     request.fields['idToken'] = _userToken;
 

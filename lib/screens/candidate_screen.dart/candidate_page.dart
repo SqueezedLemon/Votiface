@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:votiface/screens/candidate_screen.dart/components/candidate_card.dart';
+import 'package:http/http.dart' as http;
 
 import 'package:image_picker/image_picker.dart';
 import '../../constants.dart';
@@ -21,6 +24,7 @@ class _CandidatePageState extends State<CandidatePage> {
   late BlockChain bc;
 
   final _picker = ImagePicker();
+  User? user = FirebaseAuth.instance.currentUser;
 
   File? image;
 
@@ -45,11 +49,62 @@ class _CandidatePageState extends State<CandidatePage> {
   handleCastVote() async {
     // take selfie
     await getImage();
+
+    // validate image from backend service
+    await validateImage();
+  }
+
+  Future<String> getIdToken() async {
+    String? token = await user?.getIdTokenResult().then((value) => value.token);
+    if (token != null) {
+      return token;
+    }
+    return "";
+  }
+
+  Future<bool> validateImage() async {
+    var l = await image!.length();
+    print("image length is $l");
+
+    var _userToken = await getIdToken();
+
+    var uri = Uri.parse(
+        "http://ce60-103-225-244-119.ngrok.io/face-recognition/check_face/"
+        // "https://vote-face-recog.herokuapp.com/face-recognition/check_face/"
+        );
+
+    var request = http.MultipartRequest('POST', uri);
+    request.fields['idToken'] = _userToken;
+
+    request.files.add(
+      http.MultipartFile.fromBytes("inputImage", image!.readAsBytesSync(),
+          filename: "img.jpg"),
+    );
+
+    // print(request.files);
+    var response = await request.send();
+    print("After request this....");
+    var responded = await http.Response.fromStream(response);
+    final responseData = responded.body.toString();
+
+    print("response status code ${response.statusCode}");
+    print("Response data $responseData");
+
+    final resJSON = json.decode(responseData);
+    bool isValid = resJSON["faceID"];
+
+    if (isValid) {
+      print("it was valid");
+    } else {
+      print("it was it valid");
+    }
+
+    return false;
   }
 
   Future getImage() async {
     final pickedFile =
-        await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
 
     if (pickedFile != null) {
       image = File(pickedFile.path);
