@@ -14,7 +14,7 @@ enum currectTab { active, upcoming }
 
 var heading = 'National Election';
 var subheading = '2022';
-var supportingText = '5:45';
+var supportingText = 'May 9 4:00PM';
 
 class VoteScreen extends StatefulWidget {
   static const routeName = '/vote';
@@ -41,137 +41,142 @@ class _VoteScreenState extends State<VoteScreen> {
         children: [
           const Text(
             'Elections',
-            style: TextStyle(fontSize: 50, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
           ),
           const SizedBox(width: double.infinity, height: kDefaultPadding),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          Column(
             children: [
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      tab = currectTab.active;
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: (tab == currectTab.active)
-                          ? kPrimaryColor
-                          : backColor,
-                      borderRadius: BorderRadius.circular(
-                          (tab == currectTab.active) ? 20 : 0),
+              Card(
+                elevation: 10.0,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/ElectionBanner.png"),
+                      fit: BoxFit.contain,
+                      alignment: Alignment.topCenter,
                     ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Active",
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: (tab == currectTab.active)
-                            ? kTextPColor
-                            : kTextColor,
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: ListTile(
+                          title: Text(
+                            heading,
+                            style: const TextStyle(
+                                color: kTextPColor,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w800),
+                          ),
+                          subtitle: Text(
+                            subheading,
+                            style: const TextStyle(
+                                color: kTextPColor,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w800),
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        height: 125.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10.0),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              supportingText,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          ButtonBar(
+                            children: [
+                              TextButton(
+                                child: const Text(
+                                  'Vote',
+                                  style: TextStyle(fontSize: 26),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed(CandidatePage.routeName);
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      tab = currectTab.upcoming;
-                    });
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: (tab == currectTab.upcoming)
-                          ? kPrimaryColor
-                          : backColor,
-                      borderRadius: BorderRadius.circular(
-                          (tab == currectTab.upcoming) ? 20 : 0),
+              Card(
+                elevation: 10.0,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/ElectionBanner.png"),
+                      fit: BoxFit.contain,
+                      alignment: Alignment.topCenter,
                     ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Upcoming",
-                      style: TextStyle(
-                        fontSize: 30,
-                        color: (tab == currectTab.upcoming)
-                            ? kTextPColor
-                            : kTextColor,
+                  ),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: ListTile(
+                          title: Text(
+                            heading,
+                            style: const TextStyle(
+                                color: kTextPColor,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w800),
+                          ),
+                          subtitle: Text(
+                            subheading,
+                            style: const TextStyle(
+                                color: kTextPColor,
+                                fontSize: 28,
+                                fontWeight: FontWeight.w800),
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        height: 125.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10.0),
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              supportingText,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          ),
+                          ButtonBar(
+                            children: [
+                              TextButton(
+                                child: const Text(
+                                  'Vote',
+                                  style: TextStyle(fontSize: 26),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushNamed(CandidatePage.routeName);
+                                },
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
             ],
-          ),
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              color: kTextColor,
-            ),
-          ),
-          Container(
-            child: Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              elevation: 10.0,
-              child: Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/ElectionBanner.png"),
-                    fit: BoxFit.contain,
-                    alignment: Alignment.topCenter,
-                  ),
-                ),
-                child: Column(
-                  children: [
-                    ListTile(
-                      title: Text(
-                        heading,
-                        style: const TextStyle(
-                            color: kTextPColor,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w800),
-                      ),
-                      subtitle: Text(
-                        subheading,
-                        style: const TextStyle(
-                            color: kTextPColor,
-                            fontSize: 28,
-                            fontWeight: FontWeight.w800),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 150.0,
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10.0),
-                      alignment: Alignment.centerLeft,
-                      child: Text(supportingText),
-                    ),
-                    ButtonBar(
-                      children: [
-                        TextButton(
-                          child: const Text(
-                            'Vote',
-                            style: const TextStyle(fontSize: 26),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(CandidatePage.routeName);
-                          },
-                        )
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-            ),
           ),
         ],
       ),
