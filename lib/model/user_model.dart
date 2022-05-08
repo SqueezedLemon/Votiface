@@ -1,16 +1,22 @@
+import 'dart:math';
 class UserModel {
   String? uid;
   String? email;
   String? firstName;
   String? secondName;
   String? citizenshipNumber;
+  String? pKey;
+  String? area ;
 
   UserModel(
       {this.uid,
       this.email,
       this.firstName,
       this.secondName,
-      this.citizenshipNumber});
+      this.citizenshipNumber,
+      this.area,
+      this.pKey
+      });
 
   // receiving data from server
   factory UserModel.fromMap(map) {
@@ -20,6 +26,8 @@ class UserModel {
       firstName: map['firstName'],
       secondName: map['secondName'],
       citizenshipNumber: map['citizenshipNumber'],
+      area: map['area'],
+      pKey: map['pKey'],
     );
   }
 
@@ -31,6 +39,8 @@ class UserModel {
       'firstName': firstName,
       'secondName': secondName,
       'citizenshipNumber': citizenshipNumber,
+      'area':area,
+      'pKey':pKey,
     };
   }
 }

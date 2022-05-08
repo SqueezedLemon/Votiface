@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 import 'package:votiface/screens/candidate_screen.dart/candidate_page.dart';
+import 'package:votiface/screens/samanupatik_screen/samanupatik_page.dart';
 import 'package:votiface/services/blockchain/blockchain.dart';
 
 import '../vote/components/body.dart';
@@ -165,7 +166,7 @@ class _VoteScreenState extends State<VoteScreen> {
                                 ),
                                 onPressed: () {
                                   Navigator.of(context)
-                                      .pushNamed(CandidatePage.routeName);
+                                      .pushNamed(SamanupatikPage.routeName);
                                 },
                               )
                             ],

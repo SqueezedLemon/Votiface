@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:votiface/constants.dart';
 import 'package:web3dart/web3dart.dart';
 import 'package:votiface/model/user_model.dart';
@@ -15,6 +17,8 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:http/http.dart';
+
+import '../../services/blockchain/blockchain.dart';
 
 const IconData upload = IconData(0xe695, fontFamily: 'MaterialIcons');
 
@@ -25,7 +29,7 @@ final uid = user?.uid;
 
 // final idTokenResult = user?.getIdToken().then(String token);
 final idTokenResult = user?.getIdTokenResult().then((value) => value.token);
-
+bool isLoading = false;
 class AccountScreen extends StatefulWidget {
   static const routeName = '/account';
   const AccountScreen({Key? key}) : super(key: key);
@@ -54,10 +58,8 @@ class _AccountScreenState extends State<AccountScreen> {
       loggedInUser = UserModel.fromMap(value.data());
       setState(() {});
     });
+    print('uid $loggedInUser.uid');
 
-    print(
-      "Hello my name is bibek",
-    );
 
     getAvatarUrlForProfile();
   }
@@ -88,7 +90,6 @@ class _AccountScreenState extends State<AccountScreen> {
           "state was $profileImageUrl $isProfileImageEmpty $isProfileImageLoading");
     });
   }
-
   Future<String> getIdToken() async {
     String? token = await user?.getIdTokenResult().then((value) => value.token);
     if (token != null) {
@@ -124,7 +125,7 @@ class _AccountScreenState extends State<AccountScreen> {
     //     "https://vote-face-recog.herokuapp.com/account-api/user/set_profile_image/");
 
     var uri = Uri.parse(
-        "http://192.168.73.113:8000/account-api/user/set_profile_image/");
+        "http://192.168.254.13:8000/account-api/user/set_profile_image/");
     var request = http.MultipartRequest('POST', uri);
     request.fields['idToken'] = _userToken;
 
@@ -215,6 +216,8 @@ class _AccountScreenState extends State<AccountScreen> {
 
   @override
   Widget build(BuildContext context) {
+    BlockChain bc = Provider.of<BlockChain>(context, listen: true);
+
     final logoutButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(20),
@@ -222,8 +225,14 @@ class _AccountScreenState extends State<AccountScreen> {
       child: Container(
         child: MaterialButton(
           padding: const EdgeInsets.fromLTRB(100, 15, 100, 15),
-          onPressed: () => FirebaseAuth.instance.signOut(),
-          child: const Text(
+          onPressed: () {
+            setState(() {
+            isLoading = true;
+          }); FirebaseAuth.instance.signOut();
+          setState(() {
+            isLoading = false;
+          });},
+          child: isLoading? CircularProgressIndicator(): const Text(
             "Logout",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -313,7 +322,7 @@ class _AccountScreenState extends State<AccountScreen> {
         child: Row(
           children: [
             ySpace,
-            GestureDetector(
+           isProfileImageLoading? CircularProgressIndicator(): GestureDetector(
               onTap: () {
                 getImage();
               },
@@ -333,7 +342,7 @@ class _AccountScreenState extends State<AccountScreen> {
               ),
             ),
             ySpace,
-            GestureDetector(
+            isProfileImageLoading? SizedBox(): GestureDetector(
               onTap: () {
                 uploadImage();
               },
@@ -366,7 +375,7 @@ class _AccountScreenState extends State<AccountScreen> {
         child: Row(
           children: [
             ySpace,
-            CircleAvatar(
+            isProfileImageLoading? CircularProgressIndicator(): CircleAvatar(
               radius: 50,
               backgroundImage: NetworkImage(profileImageUrl),
             ),
@@ -382,9 +391,9 @@ class _AccountScreenState extends State<AccountScreen> {
       height: MediaQuery.of(context).size.height * 0.15,
     );
 
-    if (isProfileImageLoading) {
-      return const CircularProgressIndicator();
-    }
+    // if (isProfileImageLoading) {
+    //   return const CircularProgressIndicator();
+    // }
 
     return Container(
       width: double.infinity,
@@ -397,6 +406,15 @@ class _AccountScreenState extends State<AccountScreen> {
           space,
           isProfileImageEmpty ? imagepick : imageshow,
           space,
+          Container(
+          padding: EdgeInsets.all(3),
+          child: QrImage(
+            data: {'publicKey':bc.publicKey.toString(),'citizenship':loggedInUser.citizenshipNumber,'area':loggedInUser.area, }.toString(),
+            version: QrVersions.auto,
+            size: 200.0,
+          ),
+        ),
+        SizedBox(height: 80,),
           logoutButton,
           // imageshow
         ],

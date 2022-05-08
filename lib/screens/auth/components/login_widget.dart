@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:votiface/components/show_success.dart';
 import 'package:votiface/services/authentication/firebase_auth.dart';
+import '../../../components/show_dialog.dart';
 import '../components/register_widget.dart';
 import '../../../constants.dart';
 
@@ -22,7 +24,7 @@ class _LoginWidgetState extends State<LoginWidget> {
     passController.dispose();
     super.dispose();
   }
-
+bool isLoading = false;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -56,7 +58,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                   child: TextFormField(
                     controller: idController,
                     decoration: const InputDecoration(
-                      hintText: 'Voter ID',
+                      hintText: 'Email',
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide.none,
                         borderRadius: BorderRadius.all(
@@ -101,26 +103,37 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Forget Password?  ',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: kTextPColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
+              // Align(
+              //   alignment: Alignment.centerRight,
+              //   child: TextButton(
+              //     onPressed: () {},
+              //     child: const Text(
+              //       'Forget Password?  ',
+              //       style: TextStyle(
+              //           fontSize: 20,
+              //           color: kTextPColor,
+              //           fontWeight: FontWeight.bold),
+              //     ),
+              //   ),
+              // ),
               const SizedBox(
-                height: 10,
+                height: 30,
               ),
               Center(
                 child: ElevatedButton(
-                  onPressed: () => signIn(
-                      email: idController.text, password: passController.text),
+                  onPressed: () async { 
+                    setState(() {
+                      isLoading = true;
+                    });
+                    var signInSuccess = await signIn(
+                      email: idController.text, password: passController.text);
+                     if(signInSuccess !=null ) showErrorDialog('Login Unsuccessful. Please check credentials.', context);
+setState(() {
+                      isLoading = false;
+                    });
+                      
+                      
+                      },
                   style: ElevatedButton.styleFrom(
                     primary: kBtnColor,
                     fixedSize: const Size(200, 50),
@@ -128,16 +141,23 @@ class _LoginWidgetState extends State<LoginWidget> {
                       borderRadius: BorderRadius.circular(90.0),
                     ),
                   ),
-                  child: Text(
+                  child: isLoading?CircularProgressIndicator(): Text(
                     'Login',
                     style: Theme.of(context).textTheme.headline5,
                   ),
                 ),
               ),
-              const Text(
+  SizedBox(height: 20,),
+              Container(
+                margin: EdgeInsets.only(left: 20),
+                child: Text(
                 "Don't have an account? ",
                 style: TextStyle(fontSize: 20, color: kTextPColor),
-              ),
+              ),),
+              SizedBox(height: 20,),
+              Container(
+                margin: EdgeInsets.only(left:20),
+                child:
               GestureDetector(
                 onTap: () {
                   Navigator.push(
@@ -152,7 +172,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                       fontWeight: FontWeight.bold,
                       fontSize: 20),
                 ),
-              )
+              ),)
             ],
           ),
         ),

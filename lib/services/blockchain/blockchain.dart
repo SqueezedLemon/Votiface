@@ -49,8 +49,6 @@ class BlockChain extends ChangeNotifier {
     
     init();
     notifyListeners();
-    print("public is $publicKey");
-    print("private is $privateKey");
   }
 
   void votersCount() async {

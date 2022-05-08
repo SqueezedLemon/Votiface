@@ -7,6 +7,6 @@ Future signIn({required String email, required String password}) async {
     await _auth.signInWithEmailAndPassword(email: email, password: password);
     return null;
   } on FirebaseAuthException catch (e) {
-    return e.message;
+    return false;
   }
 }

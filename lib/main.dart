@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:votiface/providers/eligible.dart';
 import 'package:votiface/providers/nav_bar_provider.dart';
 import 'package:votiface/routes.dart';
 import 'package:votiface/screens/landing/landing_screen.dart';
@@ -26,7 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => BlockChain(),
-        )
+        ),ChangeNotifierProvider(
+          create: (context) => Eligible(),
+        ),
       ],
       child: MaterialApp(
         title: 'Votiface',

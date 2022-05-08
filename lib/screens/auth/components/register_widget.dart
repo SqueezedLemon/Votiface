@@ -1,11 +1,18 @@
+import 'dart:math';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:votiface/components/show_success.dart';
 import 'package:votiface/model/user_model.dart';
 import 'package:votiface/screens/auth/components/body.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../components/show_dialog.dart';
 import '../../../constants.dart';
+import '../../../providers/eligible.dart';
+import '../../../services/blockchain/blockchain.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({Key? key}) : super(key: key);
@@ -18,7 +25,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
   // string for displaying the error Message
   String? errorMessage;
-
+  bool isLoading = false;
   // our form key
   final _formKey = GlobalKey<FormState>();
   // editing Controller
@@ -28,9 +35,32 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final emailEditingController = TextEditingController();
   final passwordEditingController = TextEditingController();
   final confirmPasswordEditingController = TextEditingController();
+  late bool isEligible;
+  Future<bool?> checkEligibility  (String cNo) async{
+        try {
+          setState(() {
+            isLoading = true;
+          }); 
+      isEligible = await Provider.of<Eligible>(context,listen: false).checkeligibility(cNo);
+       setState(() {
+            isLoading = false;
+          }); 
+    return isEligible;
 
+    } catch (e) {
+      const errorMessage = 'Uhoh an error occured! Please try again later.';
+      showErrorDialog('The Citizenship record is not found', context);
+     
+    }
+    setState(() {
+            isLoading = false;
+          }); 
+    return null;
+    
+  }
   @override
   Widget build(BuildContext context) {
+   BlockChain bc = Provider.of<BlockChain>(context, listen: false);
     //first name field
     final firstNameField = TextFormField(
         autofocus: false,
@@ -66,7 +96,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         keyboardType: TextInputType.name,
         validator: (value) {
           if (value!.isEmpty) {
-            return ("Second Name cannot be Empty");
+            return ("Last Name cannot be Empty");
           }
           return null;
         },
@@ -77,7 +107,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         decoration: InputDecoration(
           prefixIcon: const Icon(Icons.account_circle),
           contentPadding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Second Name",
+          hintText: "Last Name",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -194,10 +224,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       child: MaterialButton(
           padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
           minWidth: MediaQuery.of(context).size.width,
-          onPressed: () {
-            signUp(emailEditingController.text, passwordEditingController.text);
+          onPressed: () async {
+            var grantSignUp = await checkEligibility(citizenshipNumberController.text.toString());
+            
+           if( grantSignUp != null){grantSignUp?
+            signUp(emailEditingController.text, passwordEditingController.text, bc):      showErrorDialog('Age not eligible for registration', context);}
+;
           },
-          child: const Text(
+          child: isLoading? CircularProgressIndicator(): const Text(
             "SignUp",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -261,15 +295,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  void signUp(String email, String password) async {
+  void signUp(String email, String password, BlockChain bc) async {
     if (_formKey.currentState!.validate()) {
       try {
         await _auth
             .createUserWithEmailAndPassword(email: email, password: password)
-            .then((value) => {postDetailsToFirestore()})
+            .then((value) => {postDetailsToFirestore(bc)})
             .catchError((e) {
           Fluttertoast.showToast(msg: e!.message);
-        });
+        }
+        );
       } on FirebaseAuthException catch (error) {
         switch (error.code) {
           case "invalid-email":
@@ -300,14 +335,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     }
   }
 
-  postDetailsToFirestore() async {
+  postDetailsToFirestore(BlockChain bc) async {
     // calling our firestore
     // calling our user model
     // sedning these values
 
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     User? user = _auth.currentUser;
-
+    String area = ([1,2]..shuffle()).first.toString();
+    await bc.generateRandomAddress();
+    String pKey = bc.privateKey;
     UserModel userModel = UserModel();
 
     // writing all the values
@@ -316,16 +353,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     userModel.firstName = firstNameEditingController.text;
     userModel.secondName = secondNameEditingController.text;
     userModel.citizenshipNumber = citizenshipNumberController.text;
+    userModel.area = area;
+    userModel.pKey = pKey;
 
     await firebaseFirestore
         .collection("users")
         .doc(user.uid)
         .set(userModel.toMap());
     Fluttertoast.showToast(msg: "Account created successfully :) ");
+       showSuccessDialog('Account Successfully Registered',context);
 
-    Navigator.pushAndRemoveUntil(
-        (context),
-        MaterialPageRoute(builder: (context) => const Body()),
-        (route) => false);
+    Navigator.of(context).popAndPushNamed('/auth');
   }
 }
