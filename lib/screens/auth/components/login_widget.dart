@@ -45,11 +45,14 @@ bool isLoading = false;
                 height: 40,
               ),
               const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 22),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 22),
                 // ignore: unnecessary_const
                 child: const Text(
                   'Login',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: kTextPColor),
                 ),
               ),
               Card(
