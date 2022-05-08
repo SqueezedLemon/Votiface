@@ -12,9 +12,9 @@ import 'package:flutter/material.dart';
 
 enum currectTab { active, upcoming }
 
-var heading = 'National Election';
+var heading = 'Direct Election';
 var subheading = '2022';
-var supportingText = 'May 9 4:00PM';
+var supportingText = 'Open';
 
 class VoteScreen extends StatefulWidget {
   static const routeName = '/vote';
@@ -62,14 +62,14 @@ class _VoteScreenState extends State<VoteScreen> {
                         padding: const EdgeInsets.all(5.0),
                         child: ListTile(
                           title: Text(
-                            heading,
+                            'Direct Election',
                             style: const TextStyle(
                                 color: kTextPColor,
                                 fontSize: 28,
                                 fontWeight: FontWeight.w800),
                           ),
                           subtitle: Text(
-                            subheading,
+                            '2022',
                             style: const TextStyle(
                                 color: kTextPColor,
                                 fontSize: 28,
@@ -127,7 +127,7 @@ class _VoteScreenState extends State<VoteScreen> {
                         padding: const EdgeInsets.all(5.0),
                         child: ListTile(
                           title: Text(
-                            heading,
+                            "Samanupatik Election",
                             style: const TextStyle(
                                 color: kTextPColor,
                                 fontSize: 28,
@@ -153,7 +153,7 @@ class _VoteScreenState extends State<VoteScreen> {
                             alignment: Alignment.centerLeft,
                             child: Text(
                               supportingText,
-                              style: TextStyle(fontSize: 20),
+                              style: const TextStyle(fontSize: 20),
                             ),
                           ),
                           ButtonBar(
