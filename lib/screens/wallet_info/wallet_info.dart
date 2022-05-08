@@ -39,7 +39,7 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
   List<dynamic> candidates = [[]];
 
   // castVote() async{
-    
+
   //   String privateKey =
   //     '6d78569f54898fec4b76ec3835ab0408c0b3bd1fa7e9f81436bf78ecec9a92df';
 
@@ -59,7 +59,6 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
 
   //   DeployedContract contract = await getContract();
 
-                                
   //   final ethFunction = contract.function("voteCandidate");
   //   print(credentials.address);
   //   final result = await ethereumClient.sendTransaction(
@@ -87,7 +86,6 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
   @override
   void initState() {
     super.initState();
-    
   }
 
   // Future<void> generateRandomAddress() async {
@@ -161,26 +159,11 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
   @override
   Widget build(BuildContext context) {
     bc = Provider.of<BlockChain>(context, listen: true);
-    final logoutButton = Material(
-      elevation: 5,
-      borderRadius: BorderRadius.circular(20),
-      color: Colors.deepPurpleAccent,
-      child: MaterialButton(
-        padding: const EdgeInsets.fromLTRB(100, 15, 100, 15),
-        onPressed: () => FirebaseAuth.instance.signOut(),
-        child: const Text(
-          "Logout",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-      ),
-    );
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        logoutButton,
         Align(
           alignment: Alignment.center,
           child: ElevatedButton(

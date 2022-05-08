@@ -218,7 +218,7 @@ class _AccountScreenState extends State<AccountScreen> {
     final logoutButton = Material(
       elevation: 5,
       borderRadius: BorderRadius.circular(20),
-      color: kColor3,
+      color: kColor2,
       child: Container(
         child: MaterialButton(
           padding: const EdgeInsets.fromLTRB(100, 15, 100, 15),
@@ -227,7 +227,7 @@ class _AccountScreenState extends State<AccountScreen> {
             "Logout",
             textAlign: TextAlign.center,
             style: TextStyle(
-                fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
+                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),
