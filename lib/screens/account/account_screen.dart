@@ -13,7 +13,7 @@ import 'package:votiface/model/user_model.dart';
 import 'package:flutter/foundation.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart';
 
 const IconData upload = IconData(0xe695, fontFamily: 'MaterialIcons');
@@ -54,11 +54,6 @@ class _AccountScreenState extends State<AccountScreen> {
       loggedInUser = UserModel.fromMap(value.data());
       setState(() {});
     });
-
-    print(
-      "Hello my name is bibek",
-    );
-
     getAvatarUrlForProfile();
   }
 
@@ -74,7 +69,6 @@ class _AccountScreenState extends State<AccountScreen> {
           .getDownloadURL();
 
       _url = url_img;
-      print("url was $url_img");
     } catch (e) {
       isEmpty = true;
     }
@@ -147,9 +141,9 @@ class _AccountScreenState extends State<AccountScreen> {
       setState(() {
         showSpinner = false;
       });
-      print('image uploaded');
+      Fluttertoast.showToast(msg: "Image Uploaded");
     } else {
-      print('failed');
+      Fluttertoast.showToast(msg: "Upload Failed");
       setState(() {
         showSpinner = false;
       });

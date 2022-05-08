@@ -43,11 +43,14 @@ class _LoginWidgetState extends State<LoginWidget> {
                 height: 40,
               ),
               const Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 22),
+                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 22),
                 // ignore: unnecessary_const
                 child: const Text(
                   'Login',
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: kTextPColor),
                 ),
               ),
               Card(
@@ -101,58 +104,57 @@ class _LoginWidgetState extends State<LoginWidget> {
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'Forget Password?  ',
-                    style: TextStyle(
-                        fontSize: 20,
-                        color: kTextPColor,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () => signIn(
-                      email: idController.text, password: passController.text),
-                  style: ElevatedButton.styleFrom(
-                    primary: kBtnColor,
-                    fixedSize: const Size(200, 50),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(90.0),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: () => signIn(
+                        email: idController.text,
+                        password: passController.text),
+                    style: ElevatedButton.styleFrom(
+                      primary: kBtnColor,
+                      fixedSize: const Size(250, 50),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(90.0),
+                      ),
+                    ),
+                    child: Text(
+                      'Login',
+                      style: Theme.of(context).textTheme.headline5,
                     ),
                   ),
-                  child: Text(
-                    'Login',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
                 ),
               ),
-              const Text(
-                "Don't have an account? ",
-                style: TextStyle(fontSize: 20, color: kTextPColor),
-              ),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const RegistrationScreen()));
-                },
-                child: const Text(
-                  "SignUp",
-                  style: TextStyle(
-                      color: kColor1,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: [
+                    const Text(
+                      "Don't have an account?",
+                      style: TextStyle(fontSize: 20, color: kTextPColor),
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.03,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const RegistrationScreen()));
+                      },
+                      child: const Text(
+                        "SignUp",
+                        style: TextStyle(
+                            color: kColor1,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20),
+                      ),
+                    )
+                  ],
                 ),
-              )
+              ),
             ],
           ),
         ),
