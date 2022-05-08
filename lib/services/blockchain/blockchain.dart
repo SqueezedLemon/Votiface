@@ -15,7 +15,7 @@ import 'package:http/http.dart';
 
 class BlockChain extends ChangeNotifier {
   String privateKey =
-      'e90415fb148e28b92a5024c27e6ca008cd05c8e0f01c723f02c44ae590380f32';
+      '00a74f50d4de0f74113cb3d5c63d01816f8885171182d8d0007e997959e703768c';
   // String privateKey =
   //     '614aff264350728eed060541370810b678d49482bd6f957ce200d93ba18d51b2';
   // String rpcUrl = 'http://192.168.17.113:8545';
@@ -38,17 +38,32 @@ class BlockChain extends ChangeNotifier {
     publicKey = credentials.address.toString();
     votersCount();
     getCandidates();
+    notifyListeners();
+  }
+  
+  Future<void> generateRandomAddress() async {
+    var rng = Random.secure();
+    EthPrivateKey random = EthPrivateKey.createRandom(rng);
+    var address = await random.extractAddress();
+    privateKey = bytesToHex(random.privateKey);
+    
+    init();
+    notifyListeners();
+    print("public is $publicKey");
+    print("private is $privateKey");
   }
 
   void votersCount() async {
     List<dynamic> result = await query('voters_count', []);
     // print(result.length);
     voters_count = int.parse(result[0].toString());
+    notifyListeners();
   }
 
   void getCandidates() async {
     List<dynamic> result = await query('getCandidates', []);
     candidates = result[0];
+    notifyListeners();
   }
 
   Future<List<dynamic>> query(String functionName, List<dynamic> args) async {

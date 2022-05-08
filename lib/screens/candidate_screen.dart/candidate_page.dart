@@ -3,9 +3,15 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:votiface/screens/candidate_screen.dart/components/candidate_card.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
+
+import 'package:web3dart/crypto.dart';
+import 'package:web3dart/web3dart.dart';
 
 import 'package:image_picker/image_picker.dart';
 import '../../constants.dart';
@@ -28,6 +34,10 @@ class _CandidatePageState extends State<CandidatePage> {
 
   File? image;
 
+  bool isLoading = false;
+
+    
+
   @override
   void initState() {
     bc = Provider.of<BlockChain>(context, listen: false);
@@ -46,12 +56,65 @@ class _CandidatePageState extends State<CandidatePage> {
     print('after $selectionList');
   }
 
-  handleCastVote() async {
+  castVote() async{
+     String privateKey =
+      '00a74f50d4de0f74113cb3d5c63d01816f8885171182d8d0007e997959e703768c';
+
+    String rpcUrl = 'https://kovan.infura.io/v3/5eddb680b6cf4ea0936f900b9269b4e9';
+    String contractAddress = "0x910C23D26b8Ab871a6c8c3570aBB0D2d381e3726";
+    
+    late Web3Client ethereumClient;
+    late EthPrivateKey credentials;
+    late Client httpClient;
+
+
+    String publicKey = "";
+    String contractName = "Voting";
+
+    credentials = EthPrivateKey.fromHex(privateKey);
+    httpClient = Client();
+    ethereumClient = Web3Client(rpcUrl, httpClient);
+    publicKey = credentials.address.toString();
+
+    DeployedContract contract = await getContract(contractName,contractAddress);
+
+                                
+    final ethFunction = contract.function("voteCandidate");
+    print(credentials.address);
+    final result = await ethereumClient.sendTransaction(
+      credentials,
+      Transaction.callContract(
+        contract: contract,
+        function: ethFunction,
+        parameters: [BigInt.from(0)],
+      ),
+      fetchChainIdFromNetworkId: true,
+      chainId: null,
+    );
+  }
+
+  Future<DeployedContract> getContract(String contractName, String contractAddress) async {
+    String contractJson =
+        await rootBundle.loadString("assets/blockchain/Voting.json");
+    var jsonAbi = jsonDecode(contractJson);
+    var abi = jsonEncode(jsonAbi['abi']);
+
+    DeployedContract contract = DeployedContract(
+      ContractAbi.fromJson(abi, contractName),
+      EthereumAddress.fromHex(contractAddress),
+    );
+
+    return contract;
+  }
+
+
+  Future<bool> handleCastVote() async {
     // take selfie
     await getImage();
 
     // validate image from backend service
-    await validateImage();
+    return await validateImage();
+    // await castVote();
   }
 
   Future<String> getIdToken() async {
@@ -68,8 +131,12 @@ class _CandidatePageState extends State<CandidatePage> {
 
     var _userToken = await getIdToken();
 
+    print("user token is  $_userToken");
+
+    // change uri to local
     var uri = Uri.parse(
-        "http://ce60-103-225-244-119.ngrok.io/face-recognition/check_face/"
+        "http://192.168.254.13:8000/face-recognition/check_face/"
+        // "http://ce60-103-225-244-119.ngrok.io/face-recognition/check_face/"
         // "https://vote-face-recog.herokuapp.com/face-recognition/check_face/"
         );
 
@@ -95,16 +162,15 @@ class _CandidatePageState extends State<CandidatePage> {
 
     if (isValid) {
       print("it was valid");
-    } else {
-      print("it was it valid");
+      return true;
     }
-
+    print("it was invalid valid");
     return false;
   }
 
   Future getImage() async {
     final pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+        await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
 
     if (pickedFile != null) {
       image = File(pickedFile.path);
@@ -141,7 +207,7 @@ class _CandidatePageState extends State<CandidatePage> {
                     children: [
                       const Icon(Icons.data_array),
                       const Text(
-                        'Total Votes',
+                        'Total Voters',
                         style: const TextStyle(
                           color: Color.fromARGB(87, 0, 0, 0),
                           fontSize: 22,
@@ -218,16 +284,37 @@ class _CandidatePageState extends State<CandidatePage> {
                               borderRadius: BorderRadius.circular(90.0),
                             ),
                           ),
-                          child: ElevatedButton(
+                          child: isLoading ? CircularProgressIndicator() : ElevatedButton(
                             onPressed: () async {
                               //todo confirmation with popup
                               print("voting....");
-                              await handleCastVote();
-                              //todo face detection
-                              //selectedCandidate = selectionList.indexWhere((element) => false)
-                              // bc.submit('voteCandidate', [
-                              //   selectionList.indexWhere((element) => false)
-                              // ]);
+                              setState(() {
+                                isLoading = true;
+                              });
+                              var isValid = await handleCastVote();
+
+                              if(isValid){
+                                // toast message face id success
+                                Fluttertoast.showToast(msg: "Face Id success");
+                                
+                                //todo face detection
+                                var id = selectionList.indexWhere((element) => element==false);
+                                print(id);
+          
+                                  bc.submit('voteCandidate', [BigInt.from(id)],);
+                            
+                                // vote success
+                                Fluttertoast.showToast(msg: "Vote Success");
+                                
+                              }else{
+                                // toast msg invalid
+                                Fluttertoast.showToast(msg: "Invalid Face ID");
+
+                              }
+                              setState(() {
+                                isLoading = false;
+                              });
+                              
                             },
                             style: ElevatedButton.styleFrom(
                               primary: kPrimaryColor,
