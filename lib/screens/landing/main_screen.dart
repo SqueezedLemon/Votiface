@@ -13,10 +13,12 @@ import 'package:votiface/screens/wallet_info/wallet_info.dart';
 
 import '../../model/user_model.dart';
 import '../../services/blockchain/blockchain.dart';
-
+final FirebaseAuth auth = FirebaseAuth.instance;
+final User? user = auth.currentUser;
+final uid = user?.uid;
 class MainScreen extends StatefulWidget {
   static const routeName = '/main';
-  const MainScreen({Key? key}) : super(key: key);
+   MainScreen({Key? key}) : super(key: key);
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -24,6 +26,9 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late BlockChain bc;
+  bool allLoaded = false;
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel loggedInUser = UserModel();
   List<Widget> screens = [
     VoteScreen(),
     EResult(),
@@ -34,27 +39,39 @@ class _MainScreenState extends State<MainScreen> {
     // TODO: implement initState
     super.initState();
     bc = Provider.of<BlockChain>(context, listen: false);
-    bc.init();
+    bc.init().then((_){
+      setState(() {
+        allLoaded = true;
+      });
+    });
+    // FirebaseFirestore.instance
+    //     .collection("users")
+    //     .doc(user!.uid)
+    //     .get()
+    //     .then((value) {
+    //  loggedInUser = UserModel.fromMap(value.data());
+    // });
+    // print('uid ${loggedInUser.firstName}');}
   }
-
+  
   @override
   Widget build(BuildContext context) {
-    User? user = FirebaseAuth.instance.currentUser;
-    UserModel loggedInUser = UserModel();
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(user!.uid)
-        .get()
-        .then((value) {
-      loggedInUser = UserModel.fromMap(value.data());
-    });
-    bc.userArea = loggedInUser.firstName!;
-    print(loggedInUser.firstName);
+    // User? user = FirebaseAuth.instance.currentUser;
+    // UserModel loggedInUser = UserModel();
+    // FirebaseFirestore.instance
+    //     .collection("users")
+    //     .doc(user!.uid)
+    //     .get()
+    //     .then((value) {
+    //   loggedInUser = UserModel.fromMap(value.data());
+    // });
+    // bc.userArea = loggedInUser.firstName!;
+    // print(loggedInUser.firstName);
 
     final screen_height = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      body: Container(
+      body: !allLoaded? Center(child: CircularProgressIndicator()): Container(
         child: Consumer<NavItems>(
           builder: (context, navItems, child) =>
               Body(bodyContent: screens[navItems.selectedNavIndex]),

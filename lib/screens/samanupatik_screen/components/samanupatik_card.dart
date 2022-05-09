@@ -1,19 +1,15 @@
 import 'package:flutter/material.dart';
 
 class SamanupatikCard extends StatefulWidget {
-  final String samanupatik_image_url;
-  final String samanupatik_name;
-  final String samanupatik_party_url;
-  final String samanupatik_party_name;
+  final String party_name;
+  final String party_url;
   final bool isSelectable;
   final int selectedIndex;
   final Function selectionCallback;
   const SamanupatikCard({
     Key? key,
-    required this.samanupatik_image_url,
-    required this.samanupatik_name,
-    required this.samanupatik_party_url,
-    required this.samanupatik_party_name,
+    required this.party_name,
+    required this.party_url,
     required this.isSelectable,
     required this.selectedIndex,
     required this.selectionCallback,
@@ -41,29 +37,17 @@ class _SamanupatikCardState extends State<SamanupatikCard> {
         child: ListTile(
           leading: CircleAvatar(
             radius: 30.0,
-            backgroundImage: AssetImage(widget.samanupatik_image_url),
+            backgroundImage: AssetImage(widget.party_url),
           ),
           title: Text(
-            widget.samanupatik_party_name,
+            widget.party_name,
             softWrap: false,
             style: TextStyle(
               color: isSelected ? Colors.white : Colors.black45,
-              fontSize: 20,
+              fontSize: 30,
             ),
           ),
-          subtitle: Text(
-            widget.samanupatik_name,
-            style: TextStyle(
-              color: isSelected ? Colors.white : Colors.black45,
-              fontSize: 18,
-            ),
-          ),
-          trailing: CircleAvatar(
-            radius: 30.0,
-            backgroundColor: Colors.grey[200],
-            backgroundImage: AssetImage(widget.samanupatik_party_url),
-          ),
-        ),
+        )
       ),
     );
   }

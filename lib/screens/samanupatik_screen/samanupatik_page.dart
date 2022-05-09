@@ -16,6 +16,7 @@ import 'package:web3dart/web3dart.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../constants.dart';
 import '../../services/blockchain/blockchain.dart';
+import 'components/samanupatik_card.dart';
 
 class SamanupatikPage extends StatefulWidget {
   static const routeName = '/samanupatik';
@@ -26,10 +27,10 @@ class SamanupatikPage extends StatefulWidget {
 }
 
 class _SamanupatikPageState extends State<SamanupatikPage> {
-  late List candidateList = [
-    ['name', 'Congress'],
-    ['biraje', 'Maoist']
-  ];
+  // late List candidateList = [
+  //   ['name', 'Congress'],
+  //   ['biraje', 'Maoist']
+  // ];
   late List selectionList;
   late BlockChain bc;
 
@@ -43,142 +44,21 @@ class _SamanupatikPageState extends State<SamanupatikPage> {
   @override
   void initState() {
     bc = Provider.of<BlockChain>(context, listen: false);
-    selectionList = [for (var i = 0; i < bc.candidates.length; i++) true];
+    selectionList = [for (var i = 0; i < bc.parties.length; i++) true];
     super.initState();
   }
 
   void selectionCallback(int selectedIndex) {
-    // print('before $selectionList $selectedIndex');
-    // setState(() {
-    //   selectionList = [
-    //     for (var i = 0; i < selectionList.length; i++)
-    //       if (i == selectedIndex) false else true
-    //   ];
-    // });
-    print('after ');
+    print('before $selectionList $selectedIndex');
+    setState(() {
+      selectionList = [
+        for (var i = 0; i < selectionList.length; i++)
+          if (i == selectedIndex) false else true
+      ];
+    });
+    print('after $selectionList ');
   }
 
-  // castVote() async{
-  //    String privateKey =
-  //     '00a74f50d4de0f74113cb3d5c63d01816f8885171182d8d0007e997959e703768c';
-
-  //   String rpcUrl = 'https://kovan.infura.io/v3/5eddb680b6cf4ea0936f900b9269b4e9';
-  //   String contractAddress = "0x910C23D26b8Ab871a6c8c3570aBB0D2d381e3726";
-
-  //   late Web3Client ethereumClient;
-  //   late EthPrivateKey credentials;
-  //   late Client httpClient;
-
-  //   String publicKey = "";
-  //   String contractName = "Voting";
-
-  //   credentials = EthPrivateKey.fromHex(privateKey);
-  //   httpClient = Client();
-  //   ethereumClient = Web3Client(rpcUrl, httpClient);
-  //   publicKey = credentials.address.toString();
-
-  //   DeployedContract contract = await getContract(contractName,contractAddress);
-
-  //   final ethFunction = contract.function("voteCandidate");
-  //   print(credentials.address);
-  //   final result = await ethereumClient.sendTransaction(
-  //     credentials,
-  //     Transaction.callContract(
-  //       contract: contract,
-  //       function: ethFunction,
-  //       parameters: [BigInt.from(0)],
-  //     ),
-  //     fetchChainIdFromNetworkId: true,
-  //     chainId: null,
-  //   );
-  // }
-
-  // Future<DeployedContract> getContract(String contractName, String contractAddress) async {
-  //   String contractJson =
-  //       await rootBundle.loadString("assets/blockchain/Voting.json");
-  //   var jsonAbi = jsonDecode(contractJson);
-  //   var abi = jsonEncode(jsonAbi['abi']);
-
-  //   DeployedContract contract = DeployedContract(
-  //     ContractAbi.fromJson(abi, contractName),
-  //     EthereumAddress.fromHex(contractAddress),
-  //   );
-
-  //   return contract;
-  // }
-
-  // Future<bool> handleCastVote() async {
-  //   // take selfie
-  //   await getImage();
-
-  //   // validate image from backend service
-  //   return await validateImage();
-  //   // await castVote();
-  // }
-
-  // Future<String> getIdToken() async {
-  //   String? token = await user?.getIdTokenResult().then((value) => value.token);
-  //   if (token != null) {
-  //     return token;
-  //   }
-  //   return "";
-  // }
-
-  // Future<bool> validateImage() async {
-  //   var l = await image!.length();
-  //   print("image length is $l");
-
-  //   var _userToken = await getIdToken();
-
-  //   print("user token is  $_userToken");
-
-  //   // change uri to local
-  //   var uri = Uri.parse(
-  //       "http://192.168.254.13:8000/face-recognition/check_face/"
-  //       // "http://ce60-103-225-244-119.ngrok.io/face-recognition/check_face/"
-  //       // "https://vote-face-recog.herokuapp.com/face-recognition/check_face/"
-  //       );
-
-  //   var request = http.MultipartRequest('POST', uri);
-  //   request.fields['idToken'] = _userToken;
-
-  //   request.files.add(
-  //     http.MultipartFile.fromBytes("inputImage", image!.readAsBytesSync(),
-  //         filename: "img.jpg"),
-  //   );
-
-  //   // print(request.files);
-  //   var response = await request.send();
-  //   print("After request this....");
-  //   var responded = await http.Response.fromStream(response);
-  //   final responseData = responded.body.toString();
-
-  //   print("response status code ${response.statusCode}");
-  //   print("Response data $responseData");
-
-  //   final resJSON = json.decode(responseData);
-  //   bool isValid = resJSON["faceID"];
-
-  //   if (isValid) {
-  //     print("it was valid");
-  //     return true;
-  //   }
-  //   print("it was invalid valid");
-  //   return false;
-  // }
-
-  // Future getImage() async {
-  //   final pickedFile =
-  //       await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
-
-  //   if (pickedFile != null) {
-  //     image = File(pickedFile.path);
-  //     print("all good bibek");
-  //     setState(() {});
-  //   } else {
-  //     print('no image selected');
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +97,7 @@ class _SamanupatikPageState extends State<SamanupatikPage> {
                     height: 8,
                   ),
                   Text(
-                    '50',
+                    bc.party_vote_count.toString(),
                     style: const TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
@@ -244,16 +124,14 @@ class _SamanupatikPageState extends State<SamanupatikPage> {
                       ListView.builder(
                         physics: NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: candidateList.length,
+                        itemCount: bc.parties.length,
                         itemBuilder: (context, index) {
-                          return CandidateCard(
-                            isSelectable: true,
+                          return SamanupatikCard(
+                            isSelectable: selectionList[index],
                             selectedIndex: index,
                             selectionCallback: selectionCallback,
-                            candidate_image_url: 'assets/ElectionBanner.png',
-                            candidate_name: candidateList[index][0],
-                            candidate_party_url: 'assets/logo.png',
-                            candidate_party_name: candidateList[index][1],
+                            party_name: bc.parties[index][0],
+                            party_url: 'assets/logo.png',
                           );
                         },
                       ),
@@ -314,7 +192,23 @@ class _SamanupatikPageState extends State<SamanupatikPage> {
                             //   setState(() {
                             //     isLoading = false;
 
-                            onPressed: () {},
+                            onPressed: () async {
+                              var id = selectionList.indexWhere(
+                                          (element) => element == false);
+                              setState(() {
+                                isLoading = true;
+                              });
+                              await bc.submit(
+                                        'voteParty',
+                                        [BigInt.from(id)],
+                                      );
+                              
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                              await bc.init();
+                              Navigator.of(context).popAndPushNamed('/vote');
+                            },
                             style: ElevatedButton.styleFrom(
                               primary: kPrimaryColor,
                               fixedSize: const Size(400, 50),
@@ -322,7 +216,7 @@ class _SamanupatikPageState extends State<SamanupatikPage> {
                                 borderRadius: BorderRadius.circular(90.0),
                               ),
                             ),
-                            child: Text(
+                            child: isLoading? CircularProgressIndicator(): Text(
                               'Submit Vote',
                               style: Theme.of(context).textTheme.headline5,
                             ),

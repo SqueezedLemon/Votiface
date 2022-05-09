@@ -30,26 +30,33 @@ class BlockChain extends ChangeNotifier {
   late EthPrivateKey credentials;
   String publicKey = "";
   String contractName = "Voting";
-
+  late List<dynamic> userData;
   int voter_count = 0;
   int party_vote_count = 0;
   int candidate_vote_count = 0;
   List<dynamic> candidates = [[]];
   List<dynamic> parties = [[]];
-  bool has_voted_candidate = false;
-  bool has_voted_party = false;
-  String userArea = '0';
-  void init() {
+  late bool has_voted_candidate;
+  late bool has_voted_party;
+  late BigInt userArea;
+  Future<void> init() async{
     credentials = EthPrivateKey.fromHex(privateKey);
     privateKey = privateKey;
     httpClient = Client();
     ethereumClient = Web3Client(rpcUrl, httpClient);
     publicKey = credentials.address.toString();
+    await getVoteState();
+    userArea = userData[1];
+    has_voted_candidate = userData[3];
+    has_voted_party = userData[4];
+    await getCandidates();
+    // await getCandidates(int.parse(userData[1]));
+
     voterCount();
     candidateVoteCount();
     partyVoteCount();
     getParties();
-    getVoteState();
+    
     notifyListeners();
   }
 
@@ -63,9 +70,10 @@ class BlockChain extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getVoteState() async {
+  Future<void> getVoteState() async {
     List<dynamic> result =
         await query('voters', [EthereumAddress.fromHex(publicKey)]);
+        userData = result;
     print("voter $result");
   }
 
@@ -90,8 +98,10 @@ class BlockChain extends ChangeNotifier {
     notifyListeners();
   }
 
-  void getCandidates(int area) async {
-    List<dynamic> result = await query('getCandidates', [BigInt.from(area)]);
+  Future<void> getCandidates() async {
+    print('call here');
+  //  print('fjhsjhfbsjhd $userData[1]}');
+    List<dynamic> result = await query('getCandidates', [userArea]);
     candidates = result[0];
     print(candidates);
 
@@ -127,7 +137,7 @@ class BlockChain extends ChangeNotifier {
     return contract;
   }
 
-  void submit(String functionName, List<dynamic> args) async {
+  Future<void> submit(String functionName, List<dynamic> args) async {
     // EthPrivateKey credentials = EthPrivateKey.fromHex(privateKey);
     DeployedContract contract = await getContract();
     final ethFunction = contract.function(functionName);

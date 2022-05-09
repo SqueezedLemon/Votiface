@@ -48,8 +48,7 @@ class _VoteScreenState extends State<VoteScreen> {
           const SizedBox(width: double.infinity, height: kDefaultPadding),
           Column(
             children: [
-              !bc.has_voted_candidate
-                  ? Card(
+              Card(
                       elevation: 10.0,
                       child: Container(
                         decoration: const BoxDecoration(
@@ -90,18 +89,21 @@ class _VoteScreenState extends State<VoteScreen> {
                                   padding: const EdgeInsets.all(10.0),
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    supportingText,
+                                  bc.has_voted_candidate
+                  ? 'Voted':  supportingText,
                                     style: TextStyle(fontSize: 20),
                                   ),
                                 ),
-                                ButtonBar(
+                               bc.has_voted_candidate
+                  ? SizedBox(): ButtonBar(
                                   children: [
                                     TextButton(
-                                      child: const Text(
+                                      child:  Text(
                                         'Vote',
                                         style: TextStyle(fontSize: 26),
                                       ),
-                                      onPressed: () {
+                                    
+                                      onPressed:                                        () {
                                         Navigator.of(context)
                                             .pushNamed(CandidatePage.routeName);
                                       },
@@ -114,7 +116,7 @@ class _VoteScreenState extends State<VoteScreen> {
                         ),
                       ),
                     )
-                  : SizedBox(),
+                  ,
               !bc.has_voted_party
                   ? Card(
                       elevation: 10.0,
@@ -157,11 +159,13 @@ class _VoteScreenState extends State<VoteScreen> {
                                   padding: const EdgeInsets.all(10.0),
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                    supportingText,
+                                    bc.has_voted_party
+                  ? 'Voted':supportingText,
                                     style: const TextStyle(fontSize: 20),
                                   ),
                                 ),
-                                ButtonBar(
+                                bc.has_voted_party
+                  ?SizedBox() :ButtonBar(
                                   children: [
                                     TextButton(
                                       child: const Text(
