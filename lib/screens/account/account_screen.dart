@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ final uid = user?.uid;
 // final idTokenResult = user?.getIdToken().then(String token);
 final idTokenResult = user?.getIdTokenResult().then((value) => value.token);
 bool isLoading = false;
+
 class AccountScreen extends StatefulWidget {
   static const routeName = '/account';
   const AccountScreen({Key? key}) : super(key: key);
@@ -60,7 +62,6 @@ class _AccountScreenState extends State<AccountScreen> {
     });
     print('uid $loggedInUser.uid');
 
-
     getAvatarUrlForProfile();
   }
 
@@ -89,6 +90,7 @@ class _AccountScreenState extends State<AccountScreen> {
           "state was $profileImageUrl $isProfileImageEmpty $isProfileImageLoading");
     });
   }
+
   Future<String> getIdToken() async {
     String? token = await user?.getIdTokenResult().then((value) => value.token);
     if (token != null) {
@@ -102,7 +104,7 @@ class _AccountScreenState extends State<AccountScreen> {
 
   Future getImage() async {
     final pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+        await _picker.pickImage(source: ImageSource.camera, imageQuality: 80);
 
     if (pickedFile != null) {
       image = File(pickedFile.path);
@@ -226,17 +228,23 @@ class _AccountScreenState extends State<AccountScreen> {
           padding: const EdgeInsets.fromLTRB(100, 15, 100, 15),
           onPressed: () {
             setState(() {
-            isLoading = true;
-          }); FirebaseAuth.instance.signOut();
-          setState(() {
-            isLoading = false;
-          });},
-          child: isLoading? CircularProgressIndicator(): const Text(
-            "Logout",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-                fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
-          ),
+              isLoading = true;
+            });
+            FirebaseAuth.instance.signOut();
+            setState(() {
+              isLoading = false;
+            });
+          },
+          child: isLoading
+              ? CircularProgressIndicator()
+              : const Text(
+                  "Logout",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
         ),
       ),
     );
@@ -321,39 +329,43 @@ class _AccountScreenState extends State<AccountScreen> {
         child: Row(
           children: [
             ySpace,
-           isProfileImageLoading? CircularProgressIndicator(): GestureDetector(
-              onTap: () {
-                getImage();
-              },
-              child: CircleAvatar(
-                radius: 50,
-                child: image == null
-                    ? const Center(
-                        child: Text('Pick Image'),
-                      )
-                    : CircleAvatar(
-                        radius: 50,
-                        child: Image.file(
-                          File(image!.path).absolute,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-              ),
-            ),
+            isProfileImageLoading
+                ? CircularProgressIndicator()
+                : GestureDetector(
+                    onTap: () {
+                      getImage();
+                    },
+                    child: CircleAvatar(
+                      radius: 50,
+                      child: image == null
+                          ? const Center(
+                              child: Text('Pick Image'),
+                            )
+                          : CircleAvatar(
+                              radius: 50,
+                              child: Image.file(
+                                File(image!.path).absolute,
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                    ),
+                  ),
             ySpace,
-            isProfileImageLoading? SizedBox(): GestureDetector(
-              onTap: () {
-                uploadImage();
-              },
-              child: Container(
-                height: 30,
-                width: 30,
-                color: backColor,
-                child: const Center(
-                  child: Icon(Icons.upload),
-                ),
-              ),
-            ),
+            isProfileImageLoading
+                ? SizedBox()
+                : GestureDetector(
+                    onTap: () {
+                      uploadImage();
+                    },
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      color: backColor,
+                      child: const Center(
+                        child: Icon(Icons.upload),
+                      ),
+                    ),
+                  ),
             ySpace,
             Column(
               children: [name, citizenshipNumber],
@@ -374,10 +386,12 @@ class _AccountScreenState extends State<AccountScreen> {
         child: Row(
           children: [
             ySpace,
-            isProfileImageLoading? CircularProgressIndicator(): CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage(profileImageUrl),
-            ),
+            isProfileImageLoading
+                ? CircularProgressIndicator()
+                : CircleAvatar(
+                    radius: 50,
+                    backgroundImage: NetworkImage(profileImageUrl),
+                  ),
             ySpace,
             Column(
               children: [name, citizenshipNumber],
@@ -406,14 +420,22 @@ class _AccountScreenState extends State<AccountScreen> {
           isProfileImageEmpty ? imagepick : imageshow,
           space,
           Container(
-          padding: EdgeInsets.all(3),
-          child: QrImage(
-            data: {'publicKey':bc.publicKey.toString(),'citizenship':loggedInUser.citizenshipNumber,'area':loggedInUser.area, }.toString(),
-            version: QrVersions.auto,
-            size: 200.0,
+            padding: EdgeInsets.all(3),
+            child: QrImage(
+              data: jsonEncode(
+                {
+                  "publicKey": bc.publicKey.toString(),
+                  "citizenship": loggedInUser.citizenshipNumber.toString(),
+                  "area": loggedInUser.area.toString(),
+                },
+              ),
+              version: QrVersions.auto,
+              size: 200.0,
+            ),
           ),
-        ),
-        SizedBox(height: 80,),
+          SizedBox(
+            height: 80,
+          ),
           logoutButton,
           // imageshow
         ],

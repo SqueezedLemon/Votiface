@@ -36,8 +36,6 @@ class _CandidatePageState extends State<CandidatePage> {
 
   bool isLoading = false;
 
-    
-
   @override
   void initState() {
     bc = Provider.of<BlockChain>(context, listen: false);
@@ -55,58 +53,6 @@ class _CandidatePageState extends State<CandidatePage> {
     });
     print('after $selectionList');
   }
-
-  castVote() async{
-     String privateKey =
-      '00a74f50d4de0f74113cb3d5c63d01816f8885171182d8d0007e997959e703768c';
-
-    String rpcUrl = 'https://kovan.infura.io/v3/5eddb680b6cf4ea0936f900b9269b4e9';
-    String contractAddress = "0x910C23D26b8Ab871a6c8c3570aBB0D2d381e3726";
-    
-    late Web3Client ethereumClient;
-    late EthPrivateKey credentials;
-    late Client httpClient;
-
-
-    String publicKey = "";
-    String contractName = "Voting";
-
-    credentials = EthPrivateKey.fromHex(privateKey);
-    httpClient = Client();
-    ethereumClient = Web3Client(rpcUrl, httpClient);
-    publicKey = credentials.address.toString();
-
-    DeployedContract contract = await getContract(contractName,contractAddress);
-
-                                
-    final ethFunction = contract.function("voteCandidate");
-    print(credentials.address);
-    final result = await ethereumClient.sendTransaction(
-      credentials,
-      Transaction.callContract(
-        contract: contract,
-        function: ethFunction,
-        parameters: [BigInt.from(0)],
-      ),
-      fetchChainIdFromNetworkId: true,
-      chainId: null,
-    );
-  }
-
-  Future<DeployedContract> getContract(String contractName, String contractAddress) async {
-    String contractJson =
-        await rootBundle.loadString("assets/blockchain/Voting.json");
-    var jsonAbi = jsonDecode(contractJson);
-    var abi = jsonEncode(jsonAbi['abi']);
-
-    DeployedContract contract = DeployedContract(
-      ContractAbi.fromJson(abi, contractName),
-      EthereumAddress.fromHex(contractAddress),
-    );
-
-    return contract;
-  }
-
 
   Future<bool> handleCastVote() async {
     // take selfie
@@ -207,7 +153,7 @@ class _CandidatePageState extends State<CandidatePage> {
                     children: [
                       const Icon(Icons.data_array),
                       const Text(
-                        'Total Voters',
+                        'Total Votes',
                         style: const TextStyle(
                           color: Color.fromARGB(87, 0, 0, 0),
                           fontSize: 22,
@@ -219,7 +165,7 @@ class _CandidatePageState extends State<CandidatePage> {
                     height: 8,
                   ),
                   Text(
-                    bc.voters_count.toString(),
+                    bc.candidate_vote_count.toString(),
                     style: const TextStyle(
                         fontSize: 40,
                         fontWeight: FontWeight.bold,
@@ -253,9 +199,9 @@ class _CandidatePageState extends State<CandidatePage> {
                             selectedIndex: index,
                             selectionCallback: selectionCallback,
                             candidate_image_url: 'assets/ElectionBanner.png',
-                            candidate_name: bc.candidates[index][0],
+                            candidate_name: bc.candidates[index][1],
                             candidate_party_url: 'assets/logo.png',
-                            candidate_party_name: bc.candidates[index][1],
+                            candidate_party_name: bc.candidates[index][2],
                           );
                         },
                       ),
@@ -284,50 +230,58 @@ class _CandidatePageState extends State<CandidatePage> {
                               borderRadius: BorderRadius.circular(90.0),
                             ),
                           ),
-                          child: isLoading ? CircularProgressIndicator() : ElevatedButton(
-                            onPressed: () async {
-                              //todo confirmation with popup
-                              print("voting....");
-                              setState(() {
-                                isLoading = true;
-                              });
-                              var isValid = await handleCastVote();
+                          child: isLoading
+                              ? CircularProgressIndicator()
+                              : ElevatedButton(
+                                  onPressed: () async {
+                                    //todo confirmation with popup
+                                    print("voting....");
+                                    setState(() {
+                                      isLoading = true;
+                                    });
+                                    // var isValid = await handleCastVote();
+                                    var isValid = true;
 
-                              if(isValid){
-                                // toast message face id success
-                                Fluttertoast.showToast(msg: "Face Id success");
-                                
-                                //todo face detection
-                                var id = selectionList.indexWhere((element) => element==false);
-                                print(id);
-          
-                                  bc.submit('voteCandidate', [BigInt.from(id)],);
-                            
-                                // vote success
-                                Fluttertoast.showToast(msg: "Vote Success");
-                                
-                              }else{
-                                // toast msg invalid
-                                Fluttertoast.showToast(msg: "Invalid Face ID");
+                                    if (isValid) {
+                                      // toast message face id success
+                                      Fluttertoast.showToast(
+                                          msg: "Face Id success");
 
-                              }
-                              setState(() {
-                                isLoading = false;
-                              });
-                              
-                            },
-                            style: ElevatedButton.styleFrom(
-                              primary: kPrimaryColor,
-                              fixedSize: const Size(400, 50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(90.0),
-                              ),
-                            ),
-                            child: Text(
-                              'Submit Vote',
-                              style: Theme.of(context).textTheme.headline5,
-                            ),
-                          ),
+                                      //todo face detection
+                                      var id = selectionList.indexWhere(
+                                          (element) => element == false);
+                                      print(id);
+
+                                      bc.submit(
+                                        'voteCandidate',
+                                        [bc.candidates[(id)][0]],
+                                      );
+
+                                      // vote success
+                                      Fluttertoast.showToast(
+                                          msg: "Vote Success");
+                                    } else {
+                                      // toast msg invalid
+                                      Fluttertoast.showToast(
+                                          msg: "Invalid Face ID");
+                                    }
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    primary: kPrimaryColor,
+                                    fixedSize: const Size(400, 50),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(90.0),
+                                    ),
+                                  ),
+                                  child: Text(
+                                    'Submit Vote',
+                                    style:
+                                        Theme.of(context).textTheme.headline5,
+                                  ),
+                                ),
                         ),
                       ),
                     ],

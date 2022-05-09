@@ -26,24 +26,26 @@ class SamanupatikPage extends StatefulWidget {
 }
 
 class _SamanupatikPageState extends State<SamanupatikPage> {
-  late List candidateList = [['name', 'Congress'],['biraje', 'Maoist']];
-  // late BlockChain bc;
+  late List candidateList = [
+    ['name', 'Congress'],
+    ['biraje', 'Maoist']
+  ];
+  late List selectionList;
+  late BlockChain bc;
 
-  // final _picker = ImagePicker();
-  // User? user = FirebaseAuth.instance.currentUser;
+  final _picker = ImagePicker();
+  User? user = FirebaseAuth.instance.currentUser;
 
-  // File? image;
+  File? image;
 
-  // bool isLoading = false;
+  bool isLoading = false;
 
-    
-
-  // @override
-  // void initState() {
-  //   bc = Provider.of<BlockChain>(context, listen: false);
-  //   selectionList = [for (var i = 0; i < bc.candidates.length; i++) true];
-  //   super.initState();
-  // }
+  @override
+  void initState() {
+    bc = Provider.of<BlockChain>(context, listen: false);
+    selectionList = [for (var i = 0; i < bc.candidates.length; i++) true];
+    super.initState();
+  }
 
   void selectionCallback(int selectedIndex) {
     // print('before $selectionList $selectedIndex');
@@ -62,11 +64,10 @@ class _SamanupatikPageState extends State<SamanupatikPage> {
 
   //   String rpcUrl = 'https://kovan.infura.io/v3/5eddb680b6cf4ea0936f900b9269b4e9';
   //   String contractAddress = "0x910C23D26b8Ab871a6c8c3570aBB0D2d381e3726";
-    
+
   //   late Web3Client ethereumClient;
   //   late EthPrivateKey credentials;
   //   late Client httpClient;
-
 
   //   String publicKey = "";
   //   String contractName = "Voting";
@@ -78,7 +79,6 @@ class _SamanupatikPageState extends State<SamanupatikPage> {
 
   //   DeployedContract contract = await getContract(contractName,contractAddress);
 
-                                
   //   final ethFunction = contract.function("voteCandidate");
   //   print(credentials.address);
   //   final result = await ethereumClient.sendTransaction(
@@ -106,7 +106,6 @@ class _SamanupatikPageState extends State<SamanupatikPage> {
 
   //   return contract;
   // }
-
 
   // Future<bool> handleCastVote() async {
   //   // take selfie
@@ -283,9 +282,9 @@ class _SamanupatikPageState extends State<SamanupatikPage> {
                               borderRadius: BorderRadius.circular(90.0),
                             ),
                           ),
-                          child: 
-                          // isLoading ? CircularProgressIndicator() :
-                           ElevatedButton(
+                          child:
+                              // isLoading ? CircularProgressIndicator() :
+                              ElevatedButton(
                             // onPressed: () async {
                             //   //todo confirmation with popup
                             //   print("voting....");
@@ -297,16 +296,16 @@ class _SamanupatikPageState extends State<SamanupatikPage> {
                             //   if(isValid){
                             //     // toast message face id success
                             //     Fluttertoast.showToast(msg: "Face Id success");
-                                
+
                             //     //todo face detection
                             //     var id = selectionList.indexWhere((element) => element==false);
                             //     print(id);
-          
+
                             //       bc.submit('voteCandidate', [BigInt.from(id)],);
-                            
+
                             //     // vote success
                             //     Fluttertoast.showToast(msg: "Vote Success");
-                                
+
                             //   }else{
                             //     // toast msg invalid
                             //     Fluttertoast.showToast(msg: "Invalid Face ID");
@@ -315,8 +314,7 @@ class _SamanupatikPageState extends State<SamanupatikPage> {
                             //   setState(() {
                             //     isLoading = false;
 
-                              
-                            onPressed: (){},
+                            onPressed: () {},
                             style: ElevatedButton.styleFrom(
                               primary: kPrimaryColor,
                               fixedSize: const Size(400, 50),

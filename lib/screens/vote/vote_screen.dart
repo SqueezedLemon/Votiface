@@ -20,15 +20,16 @@ var supportingText = 'Open';
 class VoteScreen extends StatefulWidget {
   static const routeName = '/vote';
   const VoteScreen({Key? key}) : super(key: key);
-
   @override
   _VoteScreenState createState() => _VoteScreenState();
 }
 
 class _VoteScreenState extends State<VoteScreen> {
+  late BlockChain bc;
+
   @override
   void initState() {
-    Provider.of<BlockChain>(context, listen: false).init();
+    bc = Provider.of<BlockChain>(context, listen: false);
     super.initState();
   }
 
@@ -47,136 +48,140 @@ class _VoteScreenState extends State<VoteScreen> {
           const SizedBox(width: double.infinity, height: kDefaultPadding),
           Column(
             children: [
-              Card(
-                elevation: 10.0,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/ElectionBanner.png"),
-                      fit: BoxFit.contain,
-                      alignment: Alignment.topCenter,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: ListTile(
-                          title: Text(
-                            'Direct Election',
-                            style: const TextStyle(
-                                color: kTextPColor,
-                                fontSize: 28,
-                                fontWeight: FontWeight.w800),
-                          ),
-                          subtitle: Text(
-                            '2022',
-                            style: const TextStyle(
-                                color: kTextPColor,
-                                fontSize: 28,
-                                fontWeight: FontWeight.w800),
+              !bc.has_voted_candidate
+                  ? Card(
+                      elevation: 10.0,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/ElectionBanner.png"),
+                            fit: BoxFit.contain,
+                            alignment: Alignment.topCenter,
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 125.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(10.0),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              supportingText,
-                              style: TextStyle(fontSize: 20),
-                            ),
-                          ),
-                          ButtonBar(
-                            children: [
-                              TextButton(
-                                child: const Text(
-                                  'Vote',
-                                  style: TextStyle(fontSize: 26),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: ListTile(
+                                title: Text(
+                                  'Direct Election',
+                                  style: const TextStyle(
+                                      color: kTextPColor,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w800),
                                 ),
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pushNamed(CandidatePage.routeName);
-                                },
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Card(
-                elevation: 10.0,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/ElectionBanner.png"),
-                      fit: BoxFit.contain,
-                      alignment: Alignment.topCenter,
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: ListTile(
-                          title: Text(
-                            "Samanupatik Election",
-                            style: const TextStyle(
-                                color: kTextPColor,
-                                fontSize: 28,
-                                fontWeight: FontWeight.w800),
-                          ),
-                          subtitle: Text(
-                            subheading,
-                            style: const TextStyle(
-                                color: kTextPColor,
-                                fontSize: 28,
-                                fontWeight: FontWeight.w800),
-                          ),
+                                subtitle: Text(
+                                  '2022',
+                                  style: const TextStyle(
+                                      color: kTextPColor,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 125.0,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10.0),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    supportingText,
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                                ButtonBar(
+                                  children: [
+                                    TextButton(
+                                      child: const Text(
+                                        'Vote',
+                                        style: TextStyle(fontSize: 26),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context)
+                                            .pushNamed(CandidatePage.routeName);
+                                      },
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 125.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(10.0),
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              supportingText,
-                              style: const TextStyle(fontSize: 20),
-                            ),
+                    )
+                  : SizedBox(),
+              !bc.has_voted_party
+                  ? Card(
+                      elevation: 10.0,
+                      child: Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("assets/ElectionBanner.png"),
+                            fit: BoxFit.contain,
+                            alignment: Alignment.topCenter,
                           ),
-                          ButtonBar(
-                            children: [
-                              TextButton(
-                                child: const Text(
-                                  'Vote',
-                                  style: TextStyle(fontSize: 26),
+                        ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: ListTile(
+                                title: Text(
+                                  "Samanupatik Election",
+                                  style: const TextStyle(
+                                      color: kTextPColor,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w800),
                                 ),
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pushNamed(SamanupatikPage.routeName);
-                                },
-                              )
-                            ],
-                          )
-                        ],
+                                subtitle: Text(
+                                  subheading,
+                                  style: const TextStyle(
+                                      color: kTextPColor,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.w800),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 125.0,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10.0),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    supportingText,
+                                    style: const TextStyle(fontSize: 20),
+                                  ),
+                                ),
+                                ButtonBar(
+                                  children: [
+                                    TextButton(
+                                      child: const Text(
+                                        'Vote',
+                                        style: TextStyle(fontSize: 26),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pushNamed(
+                                            SamanupatikPage.routeName);
+                                      },
+                                    )
+                                  ],
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-              ),
+                    )
+                  : SizedBox(),
             ],
           ),
         ],
